@@ -1,2 +1,3 @@
-# hepial
-Compilator for the custom language hepial
+# Hepial
+
+Compiler for the custom language Hepial.
