@@ -1,0 +1,14 @@
+programme hepial2
+
+entier aa,b;
+
+debutprg
+
+	lire aa;
+	lire b;
+	si (aa>=b) alors
+		ecrire aa;
+	sinon
+		ecrire b;
+	finsi
+finprg

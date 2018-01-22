@@ -10,7 +10,7 @@ import java_cup.runtime.*;
 import java.util.Vector;
 
 %%
-%class Smgl
+%class Hepial
 %line
 %column
 %cup
@@ -18,7 +18,7 @@ import java.util.Vector;
 %%
 "programme"             { return new Symbol(sym.PRG);}
 "debutprg"              { return new Symbol(sym.STARTPRG);}
-"finprg"                { return new Symbol(sym.STARTPRG);}
+"finprg"                { return new Symbol(sym.ENDPRG);}
 "debutfonc"             { return new Symbol(sym.STARTFUNC);}
 "finfonc"               { return new Symbol(sym.ENDFUNC);}
 "constante"             { return new Symbol(sym.CONSTANT);}
@@ -27,7 +27,7 @@ import java.util.Vector;
 "\)"                    { return new Symbol(sym.CLOSEPARENT);}
 "\="                    { return new Symbol(sym.EQUAL);}
 "\,"                    { return new Symbol(sym.COMMA);}
-"\:"                    { return new Symbol(sym.DOUBLEPOINTS);}
+".."                    { return new Symbol(sym.DOUBLEPOINTS);}
 "\["                    { return new Symbol(sym.OPENBRACK);}
 "\]"                    { return new Symbol(sym.CLOSEBRACK);}
 "\+"                    { return new Symbol(sym.PLUS);}
@@ -60,11 +60,11 @@ import java.util.Vector;
 "lire"                  { return new Symbol(sym.READ);}
 "ecrire"                { return new Symbol(sym.WRITE);}
 "retourne"              { return new Symbol(sym.RETURNSYM);}
+"entier"                { return new Symbol(sym.TINTEGER,yytext());}
+"booleen"               { return new Symbol(sym.TBOOLEAN,yytext());}
 [0-9]+                  { return new Symbol(sym.INTEGERCONST,yytext());}
 [\"]([^\"]|\"\")*[\"]   { return new Symbol(sym.STRINGCONST,yytext());}
 [a-zA-Z][a-zA-Z0-9]*    { return new Symbol(sym.IDENT,yytext());}
-"entier"                { return new Symbol(sym.TINTEGER,yytext());}
-"booleen"               { return new Symbol(sym.TBOOLEAN,yytext());}
-\/\/[^\n|^\r\n]*        { return new Symbol(sym.COMMENT);}
+//\/\/[^\n|^\r\n]*        { return new Symbol(sym.COMMENT);}
 //don't check spaces, tab and carriage return
 [\ |\t|\n|\r|\r\n]  { }

@@ -6,7 +6,7 @@ parser code {: :};
 init with {: :};
 
 terminal PRG, STARTPRG, ENDPRG, STARTFUNC, ENDFUNC, CONSTANT;
-terminal SEMICOLON, OPENPARENT, CLOSEPARRENT, EQUAL, COMMA, DOUBLEPOINTS;
+terminal SEMICOLON, OPENPARENT, CLOSEPARENT, EQUAL, COMMA, DOUBLEPOINTS;
 terminal OPENBRACK, CLOSEBRACK, PLUS, MINUS, TILDA, TIMES, NOT, AND, OR, DIVIDE;
 terminal EQUALS, DIFF, INF, SUP, INFEQUAL, SUPEQUAL, TRUESYM, FALSESYM;
 terminal WHILESYM, DOSYM, ENDWHILE, IFSYM, THEN, ELSESYM, ENDIF;
@@ -18,7 +18,7 @@ terminal String IDENT;
 terminal String TINTEGER;
 terminal String TBOOLEAN;
 
-non terminal axiome, programm, decla, declavar, declaconst, declafunc;
+non terminal axiome, programme, entete, decla, declavar, declaconst ,decla_star, declafonct;
 non terminal dim, expr, param, body, instr, affect;
 non terminal write_instr, read_instr, cond, while_instr, for_instr, return_instr;
 non terminal funccall, funcparams, opebin, opeun, index, access, operand;
@@ -33,3 +33,84 @@ non terminal String array;
 precedence left PLUS, MINUS, TIMES, DIVIDE, EQUALS, DIFF;
 precedence left INF, SUP, INFEQUAL, SUPEQUAL, AND, OR, DOUBLEPOINTS;
 precedence right TILDA, NOT;
+
+//HEPIAL GRAMMAR RULES (ordered like the exemple in the pdf)
+
+
+axiome::= programme;
+
+programme::=  entete decla_star STARTPRG body  ENDPRG;
+
+entete::= PRG IDENT;
+
+decla_star::= decla decla_star | decla;
+
+decla::= declavar | declaconst | declafonct;
+
+declavar::= type lident SEMICOLON;
+
+lident::=
+    IDENT
+    | lident COMMA IDENT;
+
+declaconst::= CONSTANT type IDENT EQUAL expr SEMICOLON;
+
+declafonct::=
+    type IDENT OPENPARENT param CLOSEPARENT decla_star STARTFUNC body ENDFUNC
+    |type IDENT OPENPARENT CLOSEPARENT decla_star STARTFUNC body ENDFUNC;
+
+type::= typebase | array:a;
+
+typebase::= TINTEGER | TBOOLEAN;
+
+array::= typebase OPENBRACK dim CLOSEBRACK;
+
+dim::=
+    expr DOUBLEPOINTS expr
+    |dim COMMA expr DOUBLEPOINTS expr;
+
+param::=
+    type IDENT
+    |param COMMA type IDENT;
+
+body::= instr body | instr ;
+
+instr::= affect | write_instr | read_instr | cond  | return_instr | while_instr | for_instr;
+
+read_instr::= READ IDENT SEMICOLON;
+
+write_instr::=
+    WRITE expr SEMICOLON
+    |WRITE STRINGCONST SEMICOLON;
+
+affect::= access EQUAL expr SEMICOLON;
+
+return_instr::= RETURNSYM expr SEMICOLON;
+
+cond::= IFSYM expr THEN body ELSESYM body ENDIF;
+
+while_instr::= WHILESYM expr DOSYM body ENDWHILE;
+
+for_instr::= FORSYM IDENT FROM expr TO expr DOSYM body ENDFOR;
+
+expr::=
+    expr opebin expr
+    |opeun expr
+    |OPENPARENT expr CLOSEPARENT
+    |operand;
+
+access::= IDENT | IDENT index PLUS;
+
+index::= OPENBRACK expr CLOSEBRACK;
+
+operand::= access | funccall | INTEGERCONST | TRUESYM | FALSESYM;
+
+opebin::= PLUS|MINUS|TIMES|DIVIDE|EQUALS|DIFF|INF|SUP|INFEQUAL|SUPEQUAL|AND|OR;
+
+opeun::=TILDA|NOT;
+
+funccall::=
+    IDENT OPENPARENT CLOSEPARENT
+    | IDENT OPENPARENT funcparams CLOSEPARENT;
+
+funcparams::= expr | funcparams COMMA expr;
