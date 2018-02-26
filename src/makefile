@@ -1,7 +1,7 @@
 JAVA=java
 JAVAC=javac
-JFLEX=~/apps/jflex-1.6.1/bin/jflex
-JAVACUP=~/apps/cup/java-cup-11a.jar
+JFLEX=../tools/jflex-1.6.1/bin/jflex
+JAVACUP=../tools/cup/java-cup-11a.jar
 CLASSPATH=$(JAVACUP):.
 
 FILE_FLEX=./hepial.flex
