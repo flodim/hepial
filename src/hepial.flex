@@ -65,6 +65,6 @@ import java.util.Vector;
 [0-9]+                  { return new Symbol(sym.INTEGERCONST,yytext());}
 [\"]([^\"]|\"\")*[\"]   { return new Symbol(sym.STRINGCONST,yytext());}
 [a-zA-Z][a-zA-Z0-9]*    { return new Symbol(sym.IDENT,yytext());}
-//\/\/[^\n|^\r\n]*        { return new Symbol(sym.COMMENT);}
+\/\/([^\n]|[^\r\n])*        { return new Symbol(sym.COMMENT);}
 //don't check spaces, tab and carriage return
 [\ |\t|\n|\r|\r\n]  { }
