@@ -50,7 +50,7 @@ programme::=  entete decla_star STARTPRG body  ENDPRG;
 
 entete::= PRG IDENT;
 
-decla_star::= decla decla_star | decla;
+decla_star::= decla decla_star | decla ;
 
 decla::= declavar | declaconst | declafonct;
 
