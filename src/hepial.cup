@@ -7,6 +7,7 @@ Date: 14.01.2018
  */
 import java_cup.runtime.*;
 import java.io.*;
+import symbole_table.*;
 
 parser code {: :};
 
@@ -68,7 +69,10 @@ declafonct::=
 
 type::= typebase | array:a;
 
-typebase::= TINTEGER | TBOOLEAN;
+typebase::=
+    TINTEGER {: TypeInteger.getInstance();:} |
+    TBOOLEAN {: TypeBoolean.getInstance();:}
+ ;
 
 array::= typebase OPENBRACK dim CLOSEBRACK;
 

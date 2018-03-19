@@ -1,3 +1,4 @@
+package symbole_table;
 
 public class Symb {
     private Type type;

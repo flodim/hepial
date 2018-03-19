@@ -1,3 +1,5 @@
+package symbole_table;
+
 public class TypeInteger extends Type {
 
     private static TypeInteger instance;

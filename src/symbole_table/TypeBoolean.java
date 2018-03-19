@@ -1,3 +1,5 @@
+package symbole_table;
+
 public class TypeBoolean extends Type {
 
     private static TypeBoolean instance;

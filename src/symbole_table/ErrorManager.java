@@ -1,3 +1,5 @@
+package symbole_table;
+
 import java.util.ArrayList;
 import java.util.List;
 

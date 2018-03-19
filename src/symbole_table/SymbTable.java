@@ -1,3 +1,5 @@
+package symbole_table;
+
 import java.util.HashMap;
 
 public class SymbTable {
