@@ -50,7 +50,7 @@ programme::=  entete decla_star STARTPRG body  ENDPRG;
 
 entete::= PRG IDENT;
 
-decla_star::= decla decla_star | decla ;
+decla_star::= decla decla_star |  ;
 
 decla::= declavar | declaconst | declafonct;
 
@@ -80,7 +80,7 @@ param::=
     type IDENT
     |param COMMA type IDENT;
 
-body::= instr body | instr ;
+body::= instr body |  ;
 
 instr::= affect | write_instr | read_instr | cond  | return_instr | while_instr | for_instr;
 
