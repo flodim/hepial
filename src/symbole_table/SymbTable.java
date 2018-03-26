@@ -37,6 +37,22 @@ public class SymbTable {
         entryMap.put(currentBlock, symbol);
     }
 
+    public Symb identifier(Entry entry) {
+        HashMap<Integer, Symb> entryMap = symbols.get(entry);
+        if (entryMap != null)
+        {
+            for (int i = currentBlock; i >= 0; i--) {
+                Symb symb = entryMap.get(i);
+
+                if (symb != null)
+                {
+                    return symb;
+                }
+            }
+        }
+        return null;
+    }
+
     public void enterBlock()
     {
         currentBlock++;
