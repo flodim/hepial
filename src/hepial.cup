@@ -9,9 +9,16 @@ import java_cup.runtime.*;
 import java.io.*;
 import symbole_table.*;
 
-parser code {: :};
+parser code {:
 
-init with {: :};
+private void enterBlock(){ SymbTable.getInstance().enterBlock(); }
+private void exitBlock(){ SymbTable.getInstance().exitBlock(); }
+
+ :};
+
+init with {:
+
+:};
 
 terminal PRG, STARTPRG, ENDPRG, STARTFUNC, ENDFUNC, CONSTANT, COMMENT;
 terminal SEMICOLON, OPENPARENT, CLOSEPARENT, EQUAL, COMMA, DOUBLEPOINTS;
@@ -47,7 +54,7 @@ precedence right TILDA, NOT;
 
 axiome::= programme;
 
-programme::=  entete decla_star STARTPRG body  ENDPRG;
+programme::=  entete decla_star STARTPRG {: enterBlock(); :} body {: exitBlock(); :} ENDPRG;
 
 entete::= PRG IDENT;
 
@@ -64,8 +71,8 @@ lident::=
 declaconst::= CONSTANT type IDENT EQUAL expr SEMICOLON;
 
 declafonct::=
-    type IDENT OPENPARENT param CLOSEPARENT decla_star STARTFUNC body ENDFUNC
-    |type IDENT OPENPARENT CLOSEPARENT decla_star STARTFUNC body ENDFUNC;
+    type IDENT OPENPARENT param CLOSEPARENT decla_star STARTFUNC {: enterBlock(); :} body {: exitBlock(); :} ENDFUNC
+    |type IDENT OPENPARENT CLOSEPARENT decla_star STARTFUNC {: enterBlock(); :} body {: exitBlock(); :} ENDFUNC;
 
 type::= typebase | array:a;
 
@@ -84,7 +91,7 @@ param::=
     type IDENT
     |param COMMA type IDENT;
 
-body::= instr body |  ;
+body ::= instr body |  ;
 
 instr::= affect | write_instr | read_instr | cond  | return_instr | while_instr | for_instr;
 
@@ -98,11 +105,11 @@ affect::= access EQUAL expr SEMICOLON;
 
 return_instr::= RETURNSYM expr SEMICOLON;
 
-cond::= IFSYM expr THEN body ELSESYM body ENDIF;
+cond::= IFSYM expr  THEN {: enterBlock(); :} body {: exitBlock(); :} ELSESYM {: enterBlock(); :} body {: exitBlock(); :} ENDIF;
 
-while_instr::= WHILESYM expr DOSYM body ENDWHILE;
+while_instr::= WHILESYM expr DOSYM {: enterBlock(); :} body {: exitBlock(); :} ENDWHILE;
 
-for_instr::= FORSYM IDENT FROM expr TO expr DOSYM body ENDFOR;
+for_instr::= FORSYM IDENT FROM expr TO expr DOSYM {: enterBlock(); :} body {: exitBlock(); :} ENDFOR;
 
 expr::=
     expr opebin expr
