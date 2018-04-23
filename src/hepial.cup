@@ -12,7 +12,8 @@ import symbole_table.*;
 parser code {:
 
 private void enterBlock(){ SymbTable.getInstance().enterBlock(); }
-private void exitBlock(){ SymbTable.getInstance().exitBlock(); }
+private void exitBlock(){ SymbTable.getInstance().exitBlock();}
+private void addSymbol(Entry entry, Symb symbol){  SymbTable.getInstance().add(entry,symbol); }
 
  :};
 
@@ -41,8 +42,7 @@ non terminal linstr, ldecla;
 
 non terminal String lident;
 non terminal String head;
-non terminal String typebase;
-non terminal String type;
+non terminal Type typebase,type;
 non terminal String array;
 
 precedence left PLUS, MINUS, TIMES, DIVIDE, EQUALS, DIFF;
@@ -62,23 +62,31 @@ decla_star::= decla decla_star |  ;
 
 decla::= declavar | declaconst | declafonct;
 
-declavar::= type lident SEMICOLON;
+declavar::= type:t lident:id SEMICOLON
+{:
+  addSymbol(new Entry(id),new Symb(t,false));
+:}
+;
 
 lident::=
-    IDENT
-    | lident COMMA IDENT;
+    IDENT:id {:RESULT=id;:}
+    | lident COMMA IDENT:id {:RESULT=id;:};
 
-declaconst::= CONSTANT type IDENT EQUAL expr SEMICOLON;
+declaconst::= CONSTANT type:t IDENT:id EQUAL expr SEMICOLON
+{:
+    addSymbol(new Entry(id),new Symb(t,true));
+:}
+;
 
 declafonct::=
     type IDENT OPENPARENT param CLOSEPARENT decla_star STARTFUNC {: enterBlock(); :} body {: exitBlock(); :} ENDFUNC
     |type IDENT OPENPARENT CLOSEPARENT decla_star STARTFUNC {: enterBlock(); :} body {: exitBlock(); :} ENDFUNC;
 
-type::= typebase | array:a;
+type::= typebase:tb {: RESULT=tb;:} | array:a ;
 
 typebase::=
-    TINTEGER {: TypeInteger.getInstance();:} |
-    TBOOLEAN {: TypeBoolean.getInstance();:}
+    TINTEGER {: RESULT= TypeInteger.getInstance();:} |
+    TBOOLEAN {: RESULT= TypeBoolean.getInstance();:}
  ;
 
 array::= typebase OPENBRACK dim CLOSEBRACK;
