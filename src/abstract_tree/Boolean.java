@@ -1,8 +1,7 @@
 package abstract_tree;
 
-import org.omg.CORBA.PUBLIC_MEMBER;
 
-public class Boolean {
+public class Boolean extends Expression{
     boolean value;
     public Boolean(boolean v){
         this.value=v;
