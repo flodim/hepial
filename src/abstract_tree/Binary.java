@@ -4,12 +4,6 @@ public abstract class Binary extends Expression{
    protected Expression left;
    protected Expression right;
 
-    public Binary (Expression l, Expression r) {
-
-        left = l;
-        right = r;
-    }
-
     public Expression getLeft() {
         return left;
     }

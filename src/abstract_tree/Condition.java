@@ -4,10 +4,10 @@ import java.util.List;
 
 public class Condition extends Instruction {
     private final Expression condition;
-    private final List<Instruction> thenInstructions;
-    private final List<Instruction> elseInstructions;
+    private final Block thenInstructions;
+    private final Block elseInstructions;
 
-    public Condition(Expression condition, List<Instruction> thenInstructions, List<Instruction> elseInstructions) {
+    public Condition(Expression condition, Block thenInstructions, Block elseInstructions) {
         this.condition = condition;
         this.thenInstructions = thenInstructions;
         this.elseInstructions = elseInstructions;
@@ -17,11 +17,11 @@ public class Condition extends Instruction {
         return condition;
     }
 
-    public List<Instruction> getThenInstructions() {
+    public Block getThenInstructions() {
         return thenInstructions;
     }
 
-    public List<Instruction> getElseInstructions() {
+    public Block getElseInstructions() {
         return elseInstructions;
     }
 }

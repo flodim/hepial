@@ -1,15 +1,17 @@
 package abstract_tree;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Block extends Instruction {
-    private final List<Instruction> instructions;
+    private final Instruction[] instructions;
 
-    public Block(List<Instruction> instructions) {
+
+    public Block(Instruction... instructions) {
         this.instructions = instructions;
     }
 
-    public List<Instruction> getInstructions() {
+    public Instruction[] getInstructions() {
         return instructions;
     }
 }

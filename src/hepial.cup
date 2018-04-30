@@ -8,8 +8,11 @@ Date: 14.01.2018
 import java_cup.runtime.*;
 import java.io.*;
 import symbole_table.*;
+import abstract_tree.*;
+import java.util.*;
 
 parser code {:
+private Stack<AbstractTree> treeStack;
 
 private void enterBlock(){ SymbTable.getInstance().enterBlock(); }
 private void exitBlock(){ SymbTable.getInstance().exitBlock();}
@@ -18,6 +21,8 @@ private void addSymbol(Entry entry, Symb symbol){  SymbTable.getInstance().add(e
  :};
 
 init with {:
+
+treeStack=new Stack<AbstractTree>();
 
 :};
 
@@ -28,7 +33,7 @@ terminal EQUALS, DIFF, INF, SUP, INFEQUAL, SUPEQUAL, TRUESYM, FALSESYM;
 terminal WHILESYM, DOSYM, ENDWHILE, IFSYM, THEN, ELSESYM, ENDIF;
 terminal FORSYM, FROM, TO, ENDFOR, READ, WRITE, RETURNSYM;
 
-terminal String INTEGERCONST;
+terminal Integer INTEGERCONST;
 terminal String STRINGCONST;
 terminal String IDENT;
 terminal String TINTEGER;
@@ -38,7 +43,6 @@ non terminal axiome, programme, entete, decla, declavar, declaconst ,decla_star,
 non terminal dim, expr, param, body, instr, affect;
 non terminal write_instr, read_instr, cond, while_instr, for_instr, return_instr;
 non terminal funccall, funcparams, opebin, opeun, index, access, operand;
-non terminal linstr, ldecla;
 
 non terminal String lident;
 non terminal String head;
@@ -99,7 +103,15 @@ param::=
     type IDENT
     |param COMMA type IDENT;
 
-body ::= instr body |  ;
+body ::= instr body
+{:
+    Instruction i = (Instruction) treeStack.pop();
+    Block b = (Block) treeStack.pop();
+    treeStack.push(new Block(i,b));
+
+:} | {: treeStack.push(new Block()); :} ;
+
+
 
 instr::= affect | write_instr | read_instr | cond  | return_instr | while_instr | for_instr;
 
@@ -109,11 +121,23 @@ write_instr::=
     WRITE expr SEMICOLON
     |WRITE STRINGCONST SEMICOLON;
 
-affect::= access EQUAL expr SEMICOLON;
+affect::= access EQUAL expr SEMICOLON
+{:
+    Expression source = (Expression) treeStack.pop();
+    Idf dest= (Idf)treeStack.pop();
+    treeStack.push(new Affectation(source,dest));
+:};
 
 return_instr::= RETURNSYM expr SEMICOLON;
 
-cond::= IFSYM expr  THEN {: enterBlock(); :} body {: exitBlock(); :} ELSESYM {: enterBlock(); :} body {: exitBlock(); :} ENDIF;
+cond::= IFSYM expr  THEN {: enterBlock(); :} body {: exitBlock(); :} ELSESYM {: enterBlock(); :} body {: exitBlock(); :} ENDIF
+{:
+    Block elseBlock= (Block)treeStack.pop();
+    Block thenBlock= (Block)treeStack.pop();
+    Expression cond= (Expression)treeStack.pop();
+    treeStack.push(new Condition(cond,thenBlock,elseBlock));
+:}
+;
 
 while_instr::= WHILESYM expr DOSYM {: enterBlock(); :} body {: exitBlock(); :} ENDWHILE;
 
@@ -121,17 +145,40 @@ for_instr::= FORSYM IDENT FROM expr TO expr DOSYM {: enterBlock(); :} body {: ex
 
 expr::=
     expr opebin expr
+    {:
+        Expression right =(Expression)treeStack.pop();
+        Binary oper = (Binary) treeStack.pop();
+        Expression left = (Expression)treeStack.pop();
+        oper.setLeft(left);
+        oper.setRight(right);
+        treeStack.push(oper);
+    :}
     |opeun expr
     |OPENPARENT expr CLOSEPARENT
-    |operand;
+    |operand ;
 
-access::= IDENT | IDENT index PLUS;
+access::= IDENT:name {:
+    treeStack.push(new Idf(name));
+:}| IDENT index PLUS;
 
 index::= OPENBRACK expr CLOSEBRACK;
 
-operand::= access | funccall | INTEGERCONST | TRUESYM | FALSESYM;
+operand::= access | funccall | INTEGERCONST:i
+{:
+   treeStack.push(new IntNumber(i));
+:} | TRUESYM | FALSESYM;
 
-opebin::= PLUS|MINUS|TIMES|DIVIDE|EQUALS|DIFF|INF|SUP|INFEQUAL|SUPEQUAL|AND|OR;
+opebin::= PLUS{: treeStack.push(new Addition()); :}
+|MINUS {: treeStack.push(new Substraction()); :}
+|TIMES {: treeStack.push(new Multiplication()); :}
+|DIVIDE{: treeStack.push(new Division()); :}
+|EQUALS {: treeStack.push(new Equal()); :}
+|DIFF {: treeStack.push(new NotEqual()); :}
+|INF {: treeStack.push(new Inferior()); :}
+|SUP {: treeStack.push(new Superior()); :}
+|INFEQUAL {: treeStack.push(new InfEqual()); :}
+|SUPEQUAL {: treeStack.push(new SupEqual()); :}
+|AND |OR;
 
 opeun::=TILDA|NOT;
 

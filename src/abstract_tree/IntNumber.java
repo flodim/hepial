@@ -1,9 +1,9 @@
 package abstract_tree;
 
-public class Number extends Expression{
-    int value;
+public class IntNumber extends Expression{
+    private Integer value;
 
-    public  Number (int val){
+    public IntNumber(Integer val){
         this.value=val;
     }
 

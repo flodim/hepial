@@ -62,7 +62,7 @@ import java.util.Vector;
 "retourne"              {System.out.println(yytext()); return new Symbol(sym.RETURNSYM);}
 "entier"                {System.out.println(yytext()); return new Symbol(sym.TINTEGER,yytext());}
 "booleen"               {System.out.println(yytext()); return new Symbol(sym.TBOOLEAN,yytext());}
-[0-9]+                  {System.out.println(yytext()); return new Symbol(sym.INTEGERCONST,yytext());}
+[0-9]+                  {System.out.println(yytext()); return new Symbol(sym.INTEGERCONST,Integer.valueOf(yytext()).intValue());}
 [\"]([^\"]|\"\")*[\"]   {System.out.println(yytext()); return new Symbol(sym.STRINGCONST,yytext());}
 [a-zA-Z][a-zA-Z0-9]*    {System.out.println(yytext()); return new Symbol(sym.IDENT,yytext());}
 \/\/([^\n]|[^\r\n])*    {System.out.println(yytext()); return new Symbol(sym.COMMENT);}
