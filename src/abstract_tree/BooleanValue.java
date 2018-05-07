@@ -1,9 +1,9 @@
 package abstract_tree;
 
 
-public class Boolean extends Expression{
+public class BooleanValue extends Expression{
     boolean value;
-    public Boolean(boolean v){
+    public BooleanValue(boolean v){
         this.value=v;
     }
 

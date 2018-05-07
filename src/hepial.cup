@@ -163,10 +163,10 @@ access::= IDENT:name {:
 
 index::= OPENBRACK expr CLOSEBRACK;
 
-operand::= access | funccall | INTEGERCONST:i
-{:
-   treeStack.push(new IntNumber(i));
-:} | TRUESYM | FALSESYM;
+operand::= access | funccall
+| INTEGERCONST:i {: treeStack.push(new IntNumber(i)); :}
+| TRUESYM {: treeStack.push(new BooleanValue(true));:}
+| FALSESYM {: treeStack.push(new BooleanValue(false)); :};
 
 opebin::= PLUS{: treeStack.push(new Addition()); :}
 |MINUS {: treeStack.push(new Substraction()); :}
