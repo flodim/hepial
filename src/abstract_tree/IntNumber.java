@@ -1,5 +1,9 @@
 package abstract_tree;
 
+import symbole_table.Type;
+import symbole_table.TypeInteger;
+import visitors.Visitor;
+
 public class IntNumber extends Expression{
     private Integer value;
 
@@ -14,5 +18,15 @@ public class IntNumber extends Expression{
     @Override
     public String toString() {
         return Integer.toString(value);
+    }
+
+    @Override
+    public Object accept(Visitor visitor) {
+        return visitor.visit(this);
+    }
+
+    @Override
+    public Type getType() {
+        return TypeInteger.getInstance();
     }
 }

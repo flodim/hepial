@@ -1,5 +1,7 @@
 package abstract_tree;
 
+import visitors.Visitor;
+
 import java.util.List;
 
 public class Condition extends Instruction {
@@ -23,5 +25,10 @@ public class Condition extends Instruction {
 
     public Block getElseInstructions() {
         return elseInstructions;
+    }
+
+    @Override
+    public Object accept(Visitor visitor) {
+        return visitor.visit(this);
     }
 }

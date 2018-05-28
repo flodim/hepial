@@ -1,5 +1,7 @@
 package abstract_tree;
 
+import visitors.Visitor;
+
 import java.util.List;
 
 public class Call extends Instruction {
@@ -17,5 +19,10 @@ public class Call extends Instruction {
 
     public List<Expression> getParameters() {
         return parameters;
+    }
+
+    @Override
+    public Object accept(Visitor visitor) {
+        return visitor.visit(this);
     }
 }

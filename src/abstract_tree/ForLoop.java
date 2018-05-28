@@ -1,5 +1,7 @@
 package abstract_tree;
 
+import visitors.Visitor;
+
 import java.util.List;
 
 public class ForLoop extends Instruction {
@@ -29,5 +31,10 @@ public class ForLoop extends Instruction {
 
     public List<Instruction> getInstructions() {
         return instructions;
+    }
+
+    @Override
+    public Object accept(Visitor visitor) {
+        return visitor.visit(this);
     }
 }

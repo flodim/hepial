@@ -1,9 +1,16 @@
 package abstract_tree;
 
-public class Inferior extends Relation {
+import visitors.Visitor;
+
+public class Inferior extends Comparison {
 
     @Override
     public String Operator() {
         return "<";
+    }
+
+    @Override
+    public Object accept(Visitor visitor) {
+        return visitor.visit(this);
     }
 }

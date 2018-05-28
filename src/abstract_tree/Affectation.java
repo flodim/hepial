@@ -1,5 +1,7 @@
 package abstract_tree;
 
+import visitors.Visitor;
+
 public class Affectation extends Instruction {
     private final Expression source;
     private final Expression destination;
@@ -15,5 +17,10 @@ public class Affectation extends Instruction {
 
     public Expression getDestination() {
         return destination;
+    }
+
+    @Override
+    public Object accept(Visitor visitor) {
+        return visitor.visit(this);
     }
 }
