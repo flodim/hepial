@@ -2,18 +2,26 @@ package abstract_tree;
 
 import visitors.Visitor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Call extends Instruction {
-    private final String identifier;
-    private final List<Expression> parameters;
+    private final Idf identifier;
+    private final ArrayList<Expression> parameters;
 
-    public Call(String identifier, List<Expression> parameters) {
+    public Call(Idf identifier, ArrayList<Expression> parameters) {
         this.identifier = identifier;
         this.parameters = parameters;
     }
 
-    public String getIdentifier() {
+    public Call(Idf identifier){
+        this(identifier,new ArrayList<>());
+    }
+    public void addParameterBefore(Expression e){
+        this.parameters.add(0, e);
+    }
+
+    public Idf getIdentifier() {
         return identifier;
     }
 

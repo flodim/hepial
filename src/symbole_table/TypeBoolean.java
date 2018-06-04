@@ -7,8 +7,7 @@ public class TypeBoolean extends Type {
     private TypeBoolean() {}
 
     public static TypeBoolean getInstance() {
-        if (instance == null)
-        {
+        if (instance == null) {
             instance = new TypeBoolean();
         }
         return instance;

@@ -52,4 +52,10 @@ public abstract class Visitor {
     public Object visit(Idf idf){return null; }
 
     public Object visit(IntNumber intNumber){return null;}
+
+    public Object visit(ReturnInstr instr){return null;}
+
+    public Object visit(WriteInstr instr){return null;}
+
+    public Object visit(ReadInstr instr){return null;}
 }

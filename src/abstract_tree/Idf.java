@@ -23,6 +23,6 @@ public class Idf extends Expression {
 
     @Override
     public Type getType() {
-        return SymbTable.getInstance().identifier(new Entry(this.name)).getType();
+        return SymbTable.getInstance().identifier(new Entry(this)).getType();
     }
 }

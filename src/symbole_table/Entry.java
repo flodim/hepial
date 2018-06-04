@@ -20,7 +20,7 @@ public class Entry {
         if (this == other) return true;
         if (other == null || getClass() != other.getClass()) return false;
         Entry entry = (Entry) other;
-        return Objects.equals(id.getName(), entry.id.getName());
+        return Objects.equals(this.id.getName(), entry.id.getName());
     }
 
     @Override

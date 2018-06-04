@@ -7,8 +7,7 @@ public class TypeInteger extends Type {
     private TypeInteger() {}
 
     public static TypeInteger getInstance() {
-        if (instance == null)
-        {
+        if (instance == null) {
             instance = new TypeInteger();
         }
         return instance;

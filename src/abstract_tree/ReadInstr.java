@@ -16,6 +16,6 @@ public class ReadInstr extends Instruction{
 
     @Override
     public Object accept(Visitor visitor) {
-        return null;
+        return visitor.visit(this);
     }
 }
