@@ -11,7 +11,7 @@ FILE_TEST_PRG_NAME=test
 
 TEST_CLASS=test
 
-FILE=../hepial_files/hepial5
+FILE=../hepial_files/hepial2
 ifdef TESTFILE
 FILE=$(TESTFILE)
 endif

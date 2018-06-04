@@ -1,16 +1,18 @@
 package symbole_table;
 
+import abstract_tree.Idf;
+
 import java.util.Objects;
 
 public class Entry {
-    private String name;
+    private Idf id;
 
-    public Entry(String name) {
-        this.name = name;
+    public Entry(Idf id) {
+        this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Idf getId() {
+        return id;
     }
 
     @Override
@@ -18,11 +20,11 @@ public class Entry {
         if (this == other) return true;
         if (other == null || getClass() != other.getClass()) return false;
         Entry entry = (Entry) other;
-        return Objects.equals(name, entry.name);
+        return Objects.equals(id.getName(), entry.id.getName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(id.getName());
     }
 }

@@ -3,17 +3,22 @@ package abstract_tree;
 import visitors.Visitor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Block extends Instruction {
-    private final Instruction[] instructions;
+    private final ArrayList<Instruction> instructions;
 
 
     public Block(Instruction... instructions) {
-        this.instructions = instructions;
+        this.instructions = new ArrayList<>();
+        this.instructions.addAll(Arrays.asList(instructions));
     }
 
-    public Instruction[] getInstructions() {
+    public void addInstructionBefore(Instruction i){
+        this.instructions.add(0, i);
+    }
+    public ArrayList<Instruction> getInstructions() {
         return instructions;
     }
 

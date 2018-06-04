@@ -2,6 +2,8 @@ package visitors;
 
 import abstract_tree.*;
 
+import javax.swing.text.html.ObjectView;
+
 public abstract class Visitor {
     public Object visit(Arithmetic arithmetic) {
         return null;
@@ -38,4 +40,16 @@ public abstract class Visitor {
     public Object visit(QualifiedCall qualifiedCall) {
         return null;
     }
+
+    public Object visit(Tilda tilda) {
+        return null;
+    }
+
+    public Object visit(Not not) {
+        return null;
+    }
+
+    public Object visit(Idf idf){return null; }
+
+    public Object visit(IntNumber intNumber){return null;}
 }

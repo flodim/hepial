@@ -10,7 +10,7 @@ public static void main (String[] arg)
 		
 			try {myP.parse();}
 			catch (Exception e) {
-				System.out.println("parse error");
+				System.out.println("parse error:\n"+e.toString()+": "+e.getMessage());
 			}
 		}
 		catch (Exception e){
