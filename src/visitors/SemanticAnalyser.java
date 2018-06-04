@@ -7,17 +7,31 @@ import symbole_table.TypeInteger;
 
 public class SemanticAnalyser implements Visitor {
 
-
     @Override
     public Object visit(Affectation affectation) {
         affectation.getDestination().accept(this);
-        Type destinationType = affectation.getDestination().getType();
-
         affectation.getSource().accept(this);
+
+        Type destinationType = affectation.getDestination().getType();
         Type sourceType = affectation.getSource().getType();
 
         if (!sourceType.isConform(destinationType)) {
             ErrorManager.getInstance().addError("Type error: source type of affectation is not conform to destination type.");
+        }
+
+        return null;
+    }
+
+    @Override
+    public Object visit(Comparison comparison) {
+        comparison.getLeft().accept(this);
+        comparison.getRight().accept(this);
+
+        Type leftType = comparison.getLeft().getType();
+        Type rightType = comparison.getRight().getType();
+
+        if (!rightType.isConform(leftType)) {
+            ErrorManager.getInstance().addError("Type error: left type of comparison is not conform to right type.");
         }
 
         return null;
@@ -63,11 +77,6 @@ public class SemanticAnalyser implements Visitor {
     }
 
     @Override
-    public Object visit(Equal equal) {
-        return null;
-    }
-
-    @Override
     public Object visit(ForLoop forLoop) {
         return null;
     }
@@ -78,37 +87,7 @@ public class SemanticAnalyser implements Visitor {
     }
 
     @Override
-    public Object visit(InfEqual infEqual) {
-        return null;
-    }
-
-    @Override
-    public Object visit(Inferior inferior) {
-        return null;
-    }
-
-    @Override
-    public Object visit(IntNumber intNumber) {
-        return null;
-    }
-
-    @Override
-    public Object visit(NotEqual notEqual) {
-        return null;
-    }
-
-    @Override
     public Object visit(QualifiedCall qualifiedCall) {
-        return null;
-    }
-
-    @Override
-    public Object visit(SupEqual supEqual) {
-        return null;
-    }
-
-    @Override
-    public Object visit(Superior superior) {
         return null;
     }
 }
