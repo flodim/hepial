@@ -57,6 +57,8 @@ public class SemanticAnalyser extends Visitor {
         return null;
     }
 
+
+
     @Override
     public Object visit(Condition condition) {
         condition.getConditionExpression().accept(this);

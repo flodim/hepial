@@ -9,7 +9,7 @@ public class ForLoop extends Instruction {
     private final Expression upperBoundary;
     private final Block instructions;
 
-    public ForLoop(String identifier, Expression lowerBoundary, Expression upperBoundary, Block instructions) {
+    public ForLoop(Expression lowerBoundary, Expression upperBoundary, Block instructions) {
         this.lowerBoundary = lowerBoundary;
         this.upperBoundary = upperBoundary;
         this.instructions = instructions;

@@ -139,9 +139,24 @@ cond::= IFSYM expr  THEN {: enterBlock(); :} body {: exitBlock(); :} ELSESYM {: 
 :}
 ;
 
-while_instr::= WHILESYM expr DOSYM {: enterBlock(); :} body {: exitBlock(); :} ENDWHILE;
+while_instr::= WHILESYM expr DOSYM {: enterBlock(); :} body {: exitBlock(); :} ENDWHILE
+{:
+    Block instructions= (Block)treeStack.pop();
+    Expression cond= (Expression)treeStack.pop();
+    treeStack.push(new WhileLoop(cond,instructions));
+:};
 
-for_instr::= FORSYM IDENT FROM expr TO expr DOSYM {: enterBlock(); :} body {: exitBlock(); :} ENDFOR;
+for_instr::= FORSYM IDENT FROM expr TO expr DOSYM {: enterBlock(); :} body {: exitBlock(); :} ENDFOR
+{:
+    Block instructions =(Block)treeStack.pop();
+    Expression upperBoundary = (Instruction)treeStack.pop();
+    Expression lowerBoundary = (Instruction)treeStack.pop();
+    treeStack.push(new ForLoop(instructions,lowerBoundary,upperBoundary));
+
+
+
+
+:};
 
 expr::=
     expr opebin expr
@@ -154,7 +169,14 @@ expr::=
         treeStack.push(oper);
     :}
     |opeun expr
-    |OPENPARENT expr CLOSEPARENT
+    {:
+
+
+    :}
+    |OPENPARENT expr CLOSEPARENT {:
+
+
+    :}
     |operand ;
 
 access::= IDENT:name {:
