@@ -3,9 +3,10 @@ package visitors;
 import abstract_tree.*;
 import symbole_table.ErrorManager;
 import symbole_table.Type;
+import symbole_table.TypeBoolean;
 import symbole_table.TypeInteger;
 
-public class SemanticAnalyser implements Visitor {
+public class SemanticAnalyser extends Visitor {
 
     @Override
     public Object visit(Affectation affectation) {
@@ -57,37 +58,35 @@ public class SemanticAnalyser implements Visitor {
     }
 
     @Override
-    public Object visit(Block block) {
-        return null;
-    }
-
-    @Override
-    public Object visit(BooleanValue booleanValue) {
-        return null;
-    }
-
-    @Override
-    public Object visit(Call call) {
-        return null;
-    }
-
-    @Override
     public Object visit(Condition condition) {
+        condition.getConditionExpression().accept(this);
+        condition.getThenInstructions().accept(this);
+
+        if (condition.getElseInstructions() != null) {
+            condition.getElseInstructions().accept(this);
+        }
+
+        if (!condition.getConditionExpression().getType().isConform(TypeBoolean.getInstance())) {
+            ErrorManager.getInstance().addError("Type error: condition is not boolean");
+        }
+
         return null;
     }
 
     @Override
     public Object visit(ForLoop forLoop) {
-        return null;
-    }
+        forLoop.getLowerBoundary().accept(this);
+        forLoop.getUpperBoundary().accept(this);
+        forLoop.getInstructions().accept(this);
 
-    @Override
-    public Object visit(Idf idf) {
-        return null;
-    }
+        if (!forLoop.getLowerBoundary().getType().isConform(TypeInteger.getInstance())) {
+            ErrorManager.getInstance().addError("Type error: for loop lower boundary is not integer");
+        }
 
-    @Override
-    public Object visit(QualifiedCall qualifiedCall) {
+        if (!forLoop.getUpperBoundary().getType().isConform(TypeInteger.getInstance())) {
+            ErrorManager.getInstance().addError("Type error: for loop upper boundary is not integer");
+        }
+
         return null;
     }
 }

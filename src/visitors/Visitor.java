@@ -2,15 +2,40 @@ package visitors;
 
 import abstract_tree.*;
 
-public interface Visitor {
-    public Object visit(Arithmetic arithmetic);
-    public Object visit(Affectation affectation);
-    public Object visit(Comparison comparison);
-    public Object visit(Block block);
-    public Object visit(BooleanValue booleanValue);
-    public Object visit(Call call);
-    public Object visit(Condition condition);
-    public Object visit(ForLoop forLoop);
-    public Object visit(Idf idf);
-    public Object visit(QualifiedCall qualifiedCall);
+public abstract class Visitor {
+    public Object visit(Arithmetic arithmetic) {
+        return null;
+    }
+
+    public Object visit(Affectation affectation) {
+        return null;
+    }
+
+    public Object visit(Comparison comparison) {
+        return null;
+    }
+
+    public Object visit(Block block) {
+        return null;
+    }
+
+    public Object visit(BooleanValue booleanValue) {
+        return null;
+    }
+
+    public Object visit(Call call) {
+        return null;
+    }
+
+    public Object visit(Condition condition) {
+        return null;
+    }
+
+    public Object visit(ForLoop forLoop) {
+        return null;
+    }
+
+    public Object visit(QualifiedCall qualifiedCall) {
+        return null;
+    }
 }

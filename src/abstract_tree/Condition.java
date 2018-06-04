@@ -2,21 +2,19 @@ package abstract_tree;
 
 import visitors.Visitor;
 
-import java.util.List;
-
 public class Condition extends Instruction {
-    private final Expression condition;
+    private final Expression conditionExpression;
     private final Block thenInstructions;
     private final Block elseInstructions;
 
-    public Condition(Expression condition, Block thenInstructions, Block elseInstructions) {
-        this.condition = condition;
+    public Condition(Expression conditionExpression, Block thenInstructions, Block elseInstructions) {
+        this.conditionExpression = conditionExpression;
         this.thenInstructions = thenInstructions;
         this.elseInstructions = elseInstructions;
     }
 
-    public Expression getCondition() {
-        return condition;
+    public Expression getConditionExpression() {
+        return conditionExpression;
     }
 
     public Block getThenInstructions() {

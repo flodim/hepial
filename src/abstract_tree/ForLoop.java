@@ -5,20 +5,14 @@ import visitors.Visitor;
 import java.util.List;
 
 public class ForLoop extends Instruction {
-    private final String identifier;
     private final Expression lowerBoundary;
     private final Expression upperBoundary;
-    private final List<Instruction> instructions;
+    private final Block instructions;
 
-    public ForLoop(String identifier, Expression lowerBoundary, Expression upperBoundary, List<Instruction> instructions) {
-        this.identifier = identifier;
+    public ForLoop(String identifier, Expression lowerBoundary, Expression upperBoundary, Block instructions) {
         this.lowerBoundary = lowerBoundary;
         this.upperBoundary = upperBoundary;
         this.instructions = instructions;
-    }
-
-    public String getIdentifier() {
-        return identifier;
     }
 
     public Expression getLowerBoundary() {
@@ -29,7 +23,7 @@ public class ForLoop extends Instruction {
         return upperBoundary;
     }
 
-    public List<Instruction> getInstructions() {
+    public Block getInstructions() {
         return instructions;
     }
 
