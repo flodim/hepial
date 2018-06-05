@@ -115,10 +115,9 @@ body ::= instr body
 
 instr::= affect | write_instr | read_instr | cond  | return_instr | while_instr | for_instr;
 
-read_instr::= READ IDENT SEMICOLON
+read_instr::= READ IDENT:id SEMICOLON
 {:
-    Idf id = (Idf)treeStack.pop();
-    treeStack.push(new ReadInstr(id));
+    treeStack.push(new ReadInstr(new Idf(id)));
 
 :};
 
@@ -159,12 +158,12 @@ while_instr::= WHILESYM expr DOSYM {: enterBlock(); :} body {: exitBlock(); :} E
     treeStack.push(new WhileLoop(cond,instructions));
 :};
 
-for_instr::= FORSYM IDENT FROM expr TO expr DOSYM {: enterBlock(); :} body {: exitBlock(); :} ENDFOR
+for_instr::= FORSYM IDENT:var FROM expr TO expr DOSYM {: enterBlock(); :} body {: exitBlock(); :} ENDFOR
 {:
     Block instructions =(Block)treeStack.pop();
     Expression upperBoundary = (Expression) treeStack.pop();
     Expression lowerBoundary = (Expression) treeStack.pop();
-    treeStack.push(new ForLoop(lowerBoundary,upperBoundary,instructions));
+    treeStack.push(new ForLoop(new Idf(var),lowerBoundary,upperBoundary,instructions));
 :};
 
 expr::=
@@ -216,14 +215,13 @@ TILDA {: treeStack.push(new Tilda()); :}
 |NOT {: treeStack.push(new Not()); :};
 
 funccall::=
-    IDENT OPENPARENT CLOSEPARENT
+    IDENT:id OPENPARENT CLOSEPARENT
     {:
-        Idf id = (Idf) treeStack.pop();
-        treeStack.push(new Call(id));
+        treeStack.push(new Call(new Idf(id)));
     :}
-    | IDENT OPENPARENT funcparams CLOSEPARENT
+    | IDENT:id OPENPARENT funcparams CLOSEPARENT
     {:
-        Idf id = (Idf) treeStack.pop();
+
         //TODO: check how to pass multiple params
     :}
     ;

@@ -17,6 +17,7 @@ public class Call extends Instruction {
     public Call(Idf identifier){
         this(identifier,new ArrayList<>());
     }
+
     public void addParameterBefore(Expression e){
         this.parameters.add(0, e);
     }
