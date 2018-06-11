@@ -100,7 +100,13 @@ dim::=
 
 param::=
     type IDENT
-    |param COMMA type IDENT;
+    |param COMMA type IDENT
+    {:
+        //TODO: check if need to add new symbol with func params?
+
+        //TODO: use list of Ids ?
+    :};
+
 
 body ::= instr body
 {:
@@ -118,7 +124,6 @@ instr::= affect | write_instr | read_instr | cond  | return_instr | while_instr 
 read_instr::= READ IDENT:id SEMICOLON
 {:
     treeStack.push(new ReadInstr(new Idf(id)));
-
 :};
 
 write_instr::=
@@ -126,7 +131,6 @@ write_instr::=
     {:
         Expression e = (Expression) treeStack.pop();
         treeStack.push(new WriteInstr(e));
-
     :}
     |WRITE STRINGCONST SEMICOLON;
 
@@ -226,5 +230,9 @@ funccall::=
     :}
     ;
 
-funcparams::= expr | funcparams COMMA expr;
+funcparams::= expr | funcparams COMMA expr
+    {:
+    //TODO: use list of expression ?
+    :}
+;
 
