@@ -15,7 +15,7 @@ public class Call extends Instruction {
     }
 
     public Call(Idf identifier){
-        this(identifier,new ArrayList<>());
+        this(identifier,new ArrayList<Expression>());
     }
 
     public void addParameterBefore(Expression e){

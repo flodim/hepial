@@ -40,15 +40,16 @@ terminal String TINTEGER;
 terminal String TBOOLEAN;
 
 non terminal axiome, programme, entete, decla, declavar, declaconst ,decla_star, declafonct;
-non terminal dim, expr, param, body, instr, affect;
+non terminal dim, expr, body, instr, affect;
 non terminal write_instr, read_instr, cond, while_instr, for_instr, return_instr;
-non terminal funccall, funcparams, opebin, opeun, index, access, operand;
-
-non terminal Idf lident;
+non terminal funccall, opebin, opeun, access, operand;
+non terminal Integer index;
+non terminal Integer funcparams;
+non terminal ArrayList<Idf> lident;
 non terminal String head;
 non terminal Type typebase,type;
 non terminal String array;
-
+non terminal HashMap<Entry,Symb> param;
 precedence left PLUS, MINUS, TIMES, DIVIDE, EQUALS, DIFF;
 precedence left INF, SUP, INFEQUAL, SUPEQUAL, AND, OR, DOUBLEPOINTS;
 precedence right TILDA, NOT;
@@ -66,15 +67,29 @@ decla_star::= decla decla_star |  ;
 
 decla::= declavar | declaconst | declafonct;
 
-declavar::= type:t lident:id SEMICOLON
+declavar::= type:t lident:id_list SEMICOLON
+
 {:
-  addSymbol(new Entry(id),new Symb(t,false));
+     for(int i=0; i<id_list.size(); i++){
+          addSymbol(new Entry(id_list.get(i)),new Symb(t,false));
+     }
+
 :}
 ;
 
 lident::=
-    IDENT:id {:RESULT= new Idf(id);:}
-    | lident COMMA IDENT:id {:RESULT= new Idf(id);:};
+    IDENT:id {:
+    ArrayList<Idf>  id_list = new ArrayList<>();
+    id_list.add(new Idf(id));
+    RESULT= id_list;
+
+    :}
+    | lident:id_list COMMA IDENT:id {:
+
+    id_list.add(new Idf(id));
+    RESULT= id_list;
+
+    :};
 
 declaconst::= CONSTANT type:t IDENT:id EQUAL expr SEMICOLON
 {:
@@ -83,8 +98,13 @@ declaconst::= CONSTANT type:t IDENT:id EQUAL expr SEMICOLON
 ;
 
 declafonct::=
-    type IDENT OPENPARENT param CLOSEPARENT decla_star STARTFUNC {: enterBlock(); :} body {: exitBlock(); :} ENDFUNC
-    |type IDENT OPENPARENT CLOSEPARENT decla_star STARTFUNC {: enterBlock(); :} body {: exitBlock(); :} ENDFUNC;
+    type IDENT:id OPENPARENT param:list_param
+     {:
+        for (HashMap.Entry<Entry,Symb> entry : list_param.entrySet()) {
+                addSymbol(entry.getKey(),entry.getValue()); }
+     :} CLOSEPARENT decla_star STARTFUNC {: enterBlock(); :} body {: exitBlock(); :} ENDFUNC
+
+    |type IDENT:id OPENPARENT CLOSEPARENT decla_star STARTFUNC {: enterBlock(); :} body {: exitBlock(); :} ENDFUNC;
 
 type::= typebase:tb {: RESULT=tb;:} | array:a ;
 
@@ -99,12 +119,17 @@ dim::=
     |dim COMMA expr DOUBLEPOINTS expr;
 
 param::=
-    type IDENT
-    |param COMMA type IDENT
+    type:t IDENT:id
     {:
-        //TODO: check if need to add new symbol with func params?
+        HashMap<Entry,Symb> list_param= new HashMap<>();
+        list_param.put(new Entry(new Idf(id)),new Symb(t,false));
+        RESULT=list_param;
 
-        //TODO: use list of Ids ?
+    :}
+    |param:list_param COMMA type:t IDENT:id
+    {:
+        list_param.put(new Entry(new Idf(id)),new Symb(t,false));
+        RESULT= list_param;
     :};
 
 
@@ -132,7 +157,8 @@ write_instr::=
         Expression e = (Expression) treeStack.pop();
         treeStack.push(new WriteInstr(e));
     :}
-    |WRITE STRINGCONST SEMICOLON;
+    |WRITE STRINGCONST:str SEMICOLON
+    {: :};
 
 affect::= access EQUAL expr SEMICOLON
 {:
@@ -164,6 +190,7 @@ while_instr::= WHILESYM expr DOSYM {: enterBlock(); :} body {: exitBlock(); :} E
 
 for_instr::= FORSYM IDENT:var FROM expr TO expr DOSYM {: enterBlock(); :} body {: exitBlock(); :} ENDFOR
 {:
+
     Block instructions =(Block)treeStack.pop();
     Expression upperBoundary = (Expression) treeStack.pop();
     Expression lowerBoundary = (Expression) treeStack.pop();
@@ -223,16 +250,26 @@ funccall::=
     {:
         treeStack.push(new Call(new Idf(id)));
     :}
-    | IDENT:id OPENPARENT funcparams CLOSEPARENT
+    | IDENT:id OPENPARENT funcparams:nb_param CLOSEPARENT
     {:
-
-        //TODO: check how to pass multiple params
+        ArrayList<Expression> params = new ArrayList<>();
+        for(int i=0;i<nb_param;i++){
+            Expression exp = (Expression)treeStack.pop();
+            params.add(exp);
+        }
+        treeStack.push(new Call(new Idf(id),params));
     :}
     ;
 
-funcparams::= expr | funcparams COMMA expr
+funcparams::= expr
+{:
+    Integer cnt=1;
+    RESULT=cnt;
+
+:}
+| funcparams:nb_param COMMA expr
     {:
-    //TODO: use list of expression ?
+        RESULT=nb_param++;
     :}
 ;
 
