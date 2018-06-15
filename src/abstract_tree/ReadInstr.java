@@ -4,7 +4,7 @@ import visitors.Visitor;
 
 public class ReadInstr extends Instruction{
 
-    Idf id;
+    private Idf id;
 
     public ReadInstr(Idf id){
         this.id=id;

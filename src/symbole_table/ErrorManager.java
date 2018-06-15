@@ -15,6 +15,10 @@ public class ErrorManager {
         errors.add(error);
     }
 
+    public List<String> getErrors() {
+        return errors;
+    }
+
     public static ErrorManager getInstance()
     {
         if (instance == null)

@@ -19,11 +19,4 @@ public abstract class Binary extends Expression{
     public void setRight(Expression right) {
         this.right = right;
     }
-
-    @Override
-    public String toString() {
-        return "("+left+Operator()+right+")";
-    }
-
-    public abstract String Operator();
 }

@@ -6,11 +6,6 @@ import visitors.Visitor;
 
 public class Or extends Binary {
     @Override
-    public String Operator() {
-        return "ou";
-    }
-
-    @Override
     public Type getType() {
         return TypeBoolean.getInstance();
     }

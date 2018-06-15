@@ -1,9 +1,7 @@
 package abstract_tree;
 
-
 import symbole_table.Type;
 import symbole_table.TypeBoolean;
-import symbole_table.TypeInteger;
 import visitors.Visitor;
 
 public class BooleanValue extends Expression{
