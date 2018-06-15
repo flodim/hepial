@@ -18,6 +18,10 @@ private void enterBlock(){ SymbTable.getInstance().enterBlock(); }
 private void exitBlock(){ SymbTable.getInstance().exitBlock();}
 private void addSymbol(Entry entry, Symb symbol){  SymbTable.getInstance().add(entry,symbol); }
 
+public Stack<AbstractTree> getTreeStack() {
+    return treeStack;
+}
+
  :};
 
 init with {:
@@ -71,7 +75,7 @@ declavar::= type:t lident:id_list SEMICOLON
 
 {:
      for(int i=0; i<id_list.size(); i++){
-          addSymbol(new Entry(id_list.get(i)),new Symb(t,false));
+          addSymbol(new Entry(id_list.get(i)), new Symb(t,false));
      }
 
 :}

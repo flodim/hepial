@@ -7,9 +7,9 @@ import java.util.List;
 
 public class Call extends Instruction {
     private final Idf identifier;
-    private final ArrayList<Expression> parameters;
+    private final List<Expression> parameters;
 
-    public Call(Idf identifier, ArrayList<Expression> parameters) {
+    public Call(Idf identifier, List<Expression> parameters) {
         this.identifier = identifier;
         this.parameters = parameters;
     }
