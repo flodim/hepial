@@ -52,7 +52,36 @@ public class SemanticAnalyser extends Visitor {
     }
 
     @Override
-    public Object visit(Arithmetic arithmetic) {
+    public Object visit(Addition addition) {
+        this.visit((Arithmetic)addition);
+        return null;
+    }
+
+    @Override
+    public Object visit(Substraction substraction) {
+        this.visit((Arithmetic)substraction);
+        return null;
+    }
+
+    @Override
+    public Object visit(Multiplication multiplication) {
+        this.visit((Arithmetic)multiplication);
+        return null;
+    }
+
+    @Override
+    public Object visit(Division division) {
+        this.visit((Arithmetic) division);
+
+        if (division.getRight() instanceof IntNumber &&
+            ((IntNumber) division.getRight()).getValue() == 0) {
+            ErrorManager.getInstance().addError("Division by zero error");
+        }
+
+        return null;
+    }
+
+    private Object visit(Arithmetic arithmetic) {
         arithmetic.getLeft().accept(this);
         arithmetic.getRight().accept(this);
 

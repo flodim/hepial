@@ -1,0 +1,4 @@
+programme addPrint
+debutprg
+	ecrire 1 + 2;
+finprg

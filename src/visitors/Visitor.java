@@ -5,10 +5,6 @@ import abstract_tree.*;
 import javax.swing.text.html.ObjectView;
 
 public abstract class Visitor {
-    public Object visit(Arithmetic arithmetic) {
-        return null;
-    }
-
     public Object visit(Affectation affectation) {
         return null;
     }
@@ -25,7 +21,9 @@ public abstract class Visitor {
         return null;
     }
 
-    public Object visit(StringValue stringValue){ return  null; }
+    public Object visit(StringValue stringValue) {
+        return null;
+    }
 
     public Object visit(Call call) {
         return null;
@@ -51,13 +49,39 @@ public abstract class Visitor {
         return null;
     }
 
-    public Object visit(Idf idf){return null; }
+    public Object visit(Idf idf) {
+        return null;
+    }
 
-    public Object visit(IntNumber intNumber){return null;}
+    public Object visit(IntNumber intNumber) {
+        return null;
+    }
 
-    public Object visit(ReturnInstr instr){return null;}
+    public Object visit(ReturnInstr instr) {
+        return null;
+    }
 
-    public Object visit(WriteInstr instr){return null;}
+    public Object visit(WriteInstr instr) {
+        return null;
+    }
 
-    public Object visit(ReadInstr instr){return null;}
+    public Object visit(ReadInstr instr) {
+        return null;
+    }
+
+    public Object visit(Addition addition) {
+        return null;
+    }
+
+    public Object visit(Substraction substraction) {
+        return null;
+    }
+
+    public Object visit(Multiplication multiplication) {
+        return null;
+    }
+
+    public Object visit(Division division) {
+        return null;
+    }
 }
