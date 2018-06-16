@@ -105,7 +105,6 @@ lident::=
 
 declaconst::= CONSTANT type:t IDENT:id EQUAL expr SEMICOLON
 {:
-    System.out.println(id);
     addSymbol(new Entry(new Idf(id)),new Symb(t,true));
 :}
 ;

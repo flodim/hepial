@@ -25,4 +25,7 @@ public class Idf extends Expression {
     public Type getType() {
         return SymbTable.getInstance().identifier(new Entry(this)).getType();
     }
+
+    public Boolean getIsConst(){ return  SymbTable.getInstance().identifier(new Entry(this)).isConst();}
+
 }

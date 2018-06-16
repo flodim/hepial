@@ -21,6 +21,11 @@ public class SemanticAnalyser extends Visitor {
         affectation.getDestination().accept(this);
         affectation.getSource().accept(this);
 
+        Idf dest=(Idf)affectation.getDestination();
+        if(dest.getIsConst()){
+            ErrorManager.getInstance().addError("Affection error: destination is a constant.");
+        }
+
         Type destinationType = affectation.getDestination().getType();
         Type sourceType = affectation.getSource().getType();
 
