@@ -14,13 +14,15 @@ public class JasminGenerator extends Visitor {
 
         // constructor
         addLine(".method public <init>()V");
-        addLine("   aload_0");
-        addLine("   invokespecial java/lang/Object/<init>()V");
-        addLine("   return");
+        addLine("aload_0");
+        addLine("invokespecial java/lang/Object/<init>()V");
+        addLine("return");
         addLine(".end method");
 
         // main
         addLine(".method public static main([Ljava/lang/String;)V");
+
+        addLine("getstatic java/lang/System/out Ljava/io/PrintStream;");
 
         this.visit(mainBlock);
 
@@ -51,9 +53,15 @@ public class JasminGenerator extends Visitor {
         return null;
     }
 
+    public Object visit(StringValue stringValue) {
+        this.addLine("ldc \"" + stringValue.getValue() + "\"");
+        return null;
+    }
+
     public Object visit(Affectation affectation) {
         affectation.getDestination().accept(this);
-        affectation.getDestination().accept(this);
+        affectation.getSource().accept(this);
+
         return null;
     }
 
@@ -61,11 +69,16 @@ public class JasminGenerator extends Visitor {
         addition.getLeft().accept(this);
         addition.getRight().accept(this);
 
+        this.addLine("iadd");
+
         return null;
     }
 
     public Object visit(WriteInstr writeInstr) {
-        //TODO
+        writeInstr.getExpr().accept(this);
+
+        this.addLine("invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V");
+
         return null;
     }
 

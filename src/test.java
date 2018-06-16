@@ -6,11 +6,9 @@ import symbole_table.ErrorManager;
 import visitors.JasminGenerator;
 import visitors.SemanticAnalyser;
 
-import java.io.FileNotFoundException;
-import java.util.Arrays;
+import java.io.*;
 import java.util.List;
 import java.util.Stack;
-import java.io.FileReader;
 
 public class test {
     public static void main(String[] arg) {
@@ -67,6 +65,7 @@ public class test {
             return;
         }
 
+
         try {
             System.out.println("Semantic analysis: done. Starting jasmin generation...");
             JasminGenerator jasminGenerator = new JasminGenerator();
@@ -74,6 +73,13 @@ public class test {
 
             System.out.println("Generated jasmin:");
             System.out.println(jasminCode);
+
+            System.out.println("Writing jasmin to output file \"HepialProgram.j\"");
+            File file = new File("HepialProgram.j");
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+                writer.write(jasminCode);
+            }
+
         }
         catch (Exception e) {
             System.out.println("Jasmin generation error:\n" + e.toString() + " : " + e.getMessage());
@@ -81,5 +87,7 @@ public class test {
                 System.out.println(stackTraceElement);
             }
         }
+
+        System.out.println();
     }
 }

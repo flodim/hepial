@@ -1,4 +1,4 @@
 programme helloWorld
 debutprg
-	ecrire "hello world"
+	ecrire "hello world";
 finprg
