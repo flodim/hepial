@@ -22,7 +22,10 @@ public class JasminGenerator extends Visitor {
         // main
         addLine(".method public static main([Ljava/lang/String;)V");
 
+        addLine(".limit stack 2");
+
         addLine("getstatic java/lang/System/out Ljava/io/PrintStream;");
+
 
         this.visit(mainBlock);
 
@@ -54,7 +57,7 @@ public class JasminGenerator extends Visitor {
     }
 
     public Object visit(StringValue stringValue) {
-        this.addLine("ldc \"" + stringValue.getValue() + "\"");
+        this.addLine("ldc " + stringValue.getValue());
         return null;
     }
 

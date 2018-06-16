@@ -10,13 +10,16 @@ FILE_CUP=./hepial.cup
 FILE_JAVA_NAME=Hepial
 FILE_TEST_PRG_NAME=test
 FILE_OUTPUT_JASMIN=HepialProgram.j
-FILE_OUTPUT_CLASS=HepialProgram.class
+FILE_OUTPUT_CLASS=HepialProgram
 
 TEST_CLASS=test
 
 FILE=../hepial_files/hepial_hello
 
-$(FILE_OUTPUT_CLASS) : $(FILE_OUTPUT_JASMIN)
+run: $(FILE_OUTPUT_CLASS).class
+	$(JAVA) $(FILE_OUTPUT_CLASS)
+
+$(FILE_OUTPUT_CLASS).class : $(FILE_OUTPUT_JASMIN)
 	$(JAVA) -jar $(JASMIN) $(FILE_OUTPUT_JASMIN)
 
 $(FILE_OUTPUT_JASMIN): $(FILE) sym.class parser.class $(FILE_JAVA_NAME).class $(FILE_TEST_PRG_NAME).class
