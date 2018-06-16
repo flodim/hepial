@@ -25,7 +25,7 @@ public class SymbTable {
     }
 
     public void add(Entry entry, Symb symbol) {
-        HashMap<Integer, Symb> entryMap = symbols.getOrDefault(entry, new HashMap<>());
+        HashMap<Integer, Symb> entryMap = symbols.computeIfAbsent(entry, k -> new HashMap<>());
 
         if (entryMap.get(currentBlock) != null)
         {
