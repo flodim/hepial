@@ -2,21 +2,24 @@ JAVA=java
 JAVAC=javac
 JFLEX=../tools/jflex-1.6.1/bin/jflex
 JAVACUP=../tools/cup/java-cup-11b.jar
+JASMIN=../tools/jasmin-2.4/jasmin.jar
 CLASSPATH=$(JAVACUP):.
 
 FILE_FLEX=./hepial.flex
 FILE_CUP=./hepial.cup
 FILE_JAVA_NAME=Hepial
 FILE_TEST_PRG_NAME=test
+FILE_OUTPUT_JASMIN=HepialProgram.j
+FILE_OUTPUT_CLASS=HepialProgram.class
 
 TEST_CLASS=test
 
 FILE=../hepial_files/hepial_hello
-ifdef TESTFILE
-FILE=$(TESTFILE)
-endif
 
-all : $(FILE) sym.class parser.class $(FILE_JAVA_NAME).class $(FILE_TEST_PRG_NAME).class
+$(FILE_OUTPUT_CLASS) : $(FILE_OUTPUT_JASMIN)
+	$(JAVA) -jar $(JASMIN) $(FILE_OUTPUT_JASMIN)
+
+$(FILE_OUTPUT_JASMIN): $(FILE) sym.class parser.class $(FILE_JAVA_NAME).class $(FILE_TEST_PRG_NAME).class
 	$(JAVA) -classpath $(CLASSPATH) $(TEST_CLASS) $(FILE)
 
 $(FILE_JAVA_NAME).java : $(FILE_FLEX)
