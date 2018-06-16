@@ -25,6 +25,8 @@ public abstract class Visitor {
         return null;
     }
 
+    public Object visit(StringValue stringValue){ return  null; }
+
     public Object visit(Call call) {
         return null;
     }

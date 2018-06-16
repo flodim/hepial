@@ -4,6 +4,7 @@ import visitors.Visitor;
 
 public class WriteInstr extends Instruction {
     Expression expr;
+
     public WriteInstr(Expression e){
         this.expr=e;
     }

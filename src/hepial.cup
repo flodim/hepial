@@ -169,7 +169,6 @@ write_instr::=
         Expression e = (Expression) treeStack.pop();
         treeStack.push(new WriteInstr(e));
     :}
-    |WRITE STRINGCONST:str SEMICOLON
     {: :};
 
 affect::= access EQUAL expr SEMICOLON
@@ -238,7 +237,9 @@ index::= OPENBRACK expr CLOSEBRACK;
 operand::= access | funccall
 | INTEGERCONST:i {: treeStack.push(new IntNumber(i)); :}
 | TRUESYM {: treeStack.push(new BooleanValue(true));:}
-| FALSESYM {: treeStack.push(new BooleanValue(false)); :};
+| FALSESYM {: treeStack.push(new BooleanValue(false)); :}
+| STRINGCONST:s {: treeStack.push(new StringValue(s)); :}
+;
 
 opebin::= PLUS{: treeStack.push(new Addition()); :}
 |MINUS {: treeStack.push(new Substraction()); :}
