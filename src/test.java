@@ -27,14 +27,25 @@ public class test {
                 return;
             }
 
-            System.out.println("Parsing: done. Starting semantic analysis...");
             Stack<AbstractTree> treeStack = myP.getTreeStack();
             SemanticAnalyser semanticAnalyser = new SemanticAnalyser();
 
             System.out.println("Tree stack: "+treeStack);
 
             Block mainBlock = (Block)treeStack.pop();
-            semanticAnalyser.visit(mainBlock);
+
+            System.out.println("Parsing: done. Starting semantic analysis...");
+            try {
+                semanticAnalyser.visit(mainBlock);
+            }
+            catch (Exception e) {
+                System.out.println("Jasmin generation error:\n" + e.toString() + " : " + e.getMessage());
+                for (StackTraceElement stackTraceElement : e.getStackTrace()) {
+                    System.out.println(stackTraceElement);
+                }
+                return;
+            }
+
 
             List<String> errors = ErrorManager.getInstance().getErrors();
             if (errors.size() != 0)

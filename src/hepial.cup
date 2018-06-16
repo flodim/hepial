@@ -14,9 +14,17 @@ import java.util.*;
 parser code {:
 private Stack<AbstractTree> treeStack;
 
-private void enterBlock(){ SymbTable.getInstance().enterBlock(); }
-private void exitBlock(){ SymbTable.getInstance().exitBlock();}
-private void addSymbol(Entry entry, Symb symbol){  SymbTable.getInstance().add(entry,symbol); }
+private void enterBlock() {
+    SymbTable.getInstance().enterBlock();
+}
+
+private void exitBlock() {
+    SymbTable.getInstance().exitBlock();
+}
+
+private void addSymbol(Entry entry, Symb symbol){
+    SymbTable.getInstance().add(entry,symbol);
+}
 
 public Stack<AbstractTree> getTreeStack() {
     return treeStack;

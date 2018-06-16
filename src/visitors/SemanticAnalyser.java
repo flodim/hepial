@@ -9,6 +9,14 @@ import symbole_table.TypeInteger;
 public class SemanticAnalyser extends Visitor {
 
     @Override
+    public Object visit(Block block) {
+        for (Instruction instruction : block.getInstructions()) {
+            instruction.accept(this);
+        }
+        return null;
+    }
+
+    @Override
     public Object visit(Affectation affectation) {
         affectation.getDestination().accept(this);
         affectation.getSource().accept(this);
