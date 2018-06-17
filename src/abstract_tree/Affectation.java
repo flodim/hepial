@@ -4,9 +4,9 @@ import visitors.Visitor;
 
 public class Affectation extends Instruction {
     private final Expression source;
-    private final Expression destination;
+    private final Idf destination;
 
-    public Affectation(Expression source, Expression destination) {
+    public Affectation(Expression source, Idf destination) {
         this.source = source;
         this.destination = destination;
     }
@@ -15,7 +15,7 @@ public class Affectation extends Instruction {
         return source;
     }
 
-    public Expression getDestination() {
+    public Idf getDestination() {
         return destination;
     }
 

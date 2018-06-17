@@ -6,12 +6,18 @@ import symbole_table.TypeBoolean;
 import symbole_table.TypeInteger;
 import symbole_table.TypeString;
 
+import java.util.HashMap;
+
 public class JasminGenerator extends Visitor {
 
     private StringBuilder jasminStringBuilder;
+    private HashMap<String, Integer> localsIndices;
+    private int nextLocalIndex;
 
     public String generate(Block mainBlock) {
         this.jasminStringBuilder = new StringBuilder();
+        this.localsIndices = new HashMap<>();
+        this.nextLocalIndex = 0;
 
         addLine(".class public HepialProgram");
         addLine(".super java/lang/Object");
@@ -27,9 +33,6 @@ public class JasminGenerator extends Visitor {
         addLine(".method public static main([Ljava/lang/String;)V");
 
         addLine(".limit stack 100");
-
-        addLine("getstatic java/lang/System/out Ljava/io/PrintStream;");
-
 
         this.visit(mainBlock);
 
@@ -69,9 +72,27 @@ public class JasminGenerator extends Visitor {
     }
 
     @Override
+    public Object visit(Idf idf) {
+        Integer localIndex = this.localsIndices.get(idf.getName());
+        if (localIndex == null) {
+            localIndex = nextLocalIndex++;
+            this.localsIndices.put(idf.getName(), localIndex);
+        }
+
+        return localIndex;
+    }
+
+    @Override
     public Object visit(Affectation affectation) {
-        affectation.getDestination().accept(this);
-        affectation.getSource().accept(this);
+        int destinationLocalIndex = (Integer) affectation.getDestination().accept(this);
+        Integer sourceLocalIndex = (Integer)affectation.getSource().accept(this);
+
+        if (sourceLocalIndex != null) {
+            // the source is an IDF
+            addLine("iload " + sourceLocalIndex);
+        }
+
+        addLine("istore " + destinationLocalIndex);
 
         return null;
     }
@@ -87,8 +108,49 @@ public class JasminGenerator extends Visitor {
     }
 
     @Override
+    public Object visit(Substraction substraction) {
+        substraction.getLeft().accept(this);
+        substraction.getRight().accept(this);
+
+        this.addLine("isub");
+
+        return null;
+    }
+
+    @Override
+    public Object visit(Multiplication multiplication) {
+        multiplication.getLeft().accept(this);
+        multiplication.getRight().accept(this);
+
+        this.addLine("imul");
+
+        return null;
+    }
+
+
+    @Override
+    public Object visit(Division division) {
+        division.getLeft().accept(this);
+        division.getRight().accept(this);
+
+        this.addLine("idiv");
+
+        return null;
+    }
+
+    @Override
+    public Object visit(Comparison comparison) {
+        return super.visit(comparison);
+    }
+
+    @Override
     public Object visit(WriteInstr writeInstr) {
-        writeInstr.getExpr().accept(this);
+        addLine("getstatic java/lang/System/out Ljava/io/PrintStream;");
+
+        Integer exprLocalIndex = (Integer) writeInstr.getExpr().accept(this);
+        if (exprLocalIndex != null) {
+            this.addLine("iload " + exprLocalIndex);
+        }
 
         if (writeInstr.getExpr().getType().isConform(TypeInteger.getInstance()) ||
                 writeInstr.getExpr().getType().isConform(TypeBoolean.getInstance())) {
@@ -99,6 +161,21 @@ public class JasminGenerator extends Visitor {
             this.addLine("invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V");
         }
 
+
+        return null;
+    }
+
+    @Override
+    public Object visit(ReadInstr readInstr) {
+
+        addLine("new java/util/Scanner");
+        addLine("dup");
+        addLine("getstatic java/lang/System/in Ljava/io/InputStream;");
+        addLine("invokespecial java/util/Scanner/<init>(Ljava/io/InputStream;)V");
+        addLine("invokevirtual java/util/Scanner/nextInt()I");
+
+        int destinationLocalIndex = (Integer)readInstr.getId().accept(this);
+        addLine("istore "+ destinationLocalIndex);
 
         return null;
     }
