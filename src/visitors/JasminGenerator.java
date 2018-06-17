@@ -34,6 +34,7 @@ public class JasminGenerator extends Visitor {
         addLine(".method public static main([Ljava/lang/String;)V");
 
         addLine(".limit stack 100");
+        addLine(".limit locals 100");
 
         this.visit(mainBlock);
 
@@ -55,20 +56,20 @@ public class JasminGenerator extends Visitor {
 
     @Override
     public Object visit(IntNumber intNumber) {
-        this.addLine("ldc "+intNumber.getValue());
+        addLine("ldc "+intNumber.getValue());
         return null;
     }
 
     @Override
     public Object visit(BooleanValue booleanValue) {
         int intValue = booleanValue.getValue()? 1 : 0;
-        this.addLine("ldc " + intValue);
+        addLine("ldc " + intValue);
         return null;
     }
 
     @Override
     public Object visit(StringValue stringValue) {
-        this.addLine("ldc " + stringValue.getValue());
+        addLine("ldc " + stringValue.getValue());
         return null;
     }
 
@@ -98,7 +99,7 @@ public class JasminGenerator extends Visitor {
         loadIfLocalIndex(addition.getLeft().accept(this));
         loadIfLocalIndex(addition.getRight().accept(this));
 
-        this.addLine("iadd");
+        addLine("iadd");
 
         return null;
     }
@@ -108,7 +109,7 @@ public class JasminGenerator extends Visitor {
         loadIfLocalIndex(substraction.getLeft().accept(this));
         loadIfLocalIndex(substraction.getRight().accept(this));
 
-        this.addLine("isub");
+        addLine("isub");
 
         return null;
     }
@@ -118,7 +119,7 @@ public class JasminGenerator extends Visitor {
         loadIfLocalIndex(multiplication.getLeft().accept(this));
         loadIfLocalIndex(multiplication.getRight().accept(this));
 
-        this.addLine("imul");
+        addLine("imul");
 
         return null;
     }
@@ -129,7 +130,7 @@ public class JasminGenerator extends Visitor {
         loadIfLocalIndex(division.getLeft().accept(this));
         loadIfLocalIndex(division.getRight().accept(this));
 
-        this.addLine("idiv");
+        addLine("idiv");
 
         return null;
     }
@@ -138,7 +139,7 @@ public class JasminGenerator extends Visitor {
     public Object visit(Or or){
         loadIfLocalIndex(or.getLeft().accept(this));
         loadIfLocalIndex(or.getRight().accept(this));
-        this.addLine("ior");
+        addLine("ior");
 
         return null;
     }
@@ -147,7 +148,7 @@ public class JasminGenerator extends Visitor {
     public Object visit(And and){
         loadIfLocalIndex(and.getLeft().accept(this));
         loadIfLocalIndex(and.getRight().accept(this));
-        this.addLine("iand");
+        addLine("iand");
 
         return null;
     }
@@ -161,14 +162,14 @@ public class JasminGenerator extends Visitor {
         String elseLabel = "else_"+ifNumber;
         String endLabel = "endif_"+ifNumber;
 
-        this.addLine("ifeq "+elseLabel);
+        addLine("ifeq "+elseLabel);
         condition.getThenInstructions().accept(this);
-        this.addLine("goto "+endLabel);
+        addLine("goto "+endLabel);
 
-        this.addLine(elseLabel+":");
+        addLine(elseLabel+":");
         condition.getElseInstructions().accept(this);
 
-        this.addLine(endLabel+":");
+        addLine(endLabel+":");
 
         return null;
     }
@@ -179,15 +180,41 @@ public class JasminGenerator extends Visitor {
         String beginLabel = "while_"+ifNumber;
         String endLabel = "endwhile_"+ifNumber;
 
-        this.addLine(beginLabel+":");
+        addLine(beginLabel+":");
         loadIfLocalIndex(whileLoop.getConditionExpression().accept(this));
 
-        this.addLine("ifeq "+endLabel);
+        addLine("ifeq "+endLabel);
         whileLoop.getInstructions().accept(this);
 
-        this.addLine("goto "+beginLabel);
+        addLine("goto "+beginLabel);
 
-        this.addLine(endLabel+":");
+        addLine(endLabel+":");
+
+        return null;
+    }
+
+    @Override
+    public Object visit(ForLoop forLoop) {
+        int ifNumber = this.nextIfNumber++;
+        String beginLabel = "for_"+ifNumber;
+        String endLabel = "endfor_"+ifNumber;
+
+        loadIfLocalIndex(forLoop.getLowerBoundary().accept(this));
+        int varLocalIndex = (Integer) forLoop.getVar().accept(this);
+        addLine("istore "+varLocalIndex);
+
+        addLine(beginLabel+":");
+        addLine("iload "+varLocalIndex);
+        loadIfLocalIndex(forLoop.getUpperBoundary().accept(this));
+
+        addLine("if_icmpgt "+endLabel);
+
+        forLoop.getInstructions().accept(this);
+
+        addLine("iinc "+varLocalIndex+" 1");
+        addLine("goto "+beginLabel);
+
+        addLine(endLabel+":");
 
         return null;
     }
@@ -237,10 +264,10 @@ public class JasminGenerator extends Visitor {
         if (writeInstr.getExpr().getType().isConform(TypeInteger.getInstance()) ||
                 writeInstr.getExpr().getType().isConform(TypeBoolean.getInstance())) {
 
-            this.addLine("invokevirtual java/io/PrintStream/println(I)V");
+            addLine("invokevirtual java/io/PrintStream/println(I)V");
         }
         else if (writeInstr.getExpr().getType().isConform(TypeString.getInstance())) {
-            this.addLine("invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V");
+            addLine("invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V");
         }
 
 
@@ -269,7 +296,7 @@ public class JasminGenerator extends Visitor {
 
     private void loadIfLocalIndex(Object maybeLocalIndex) {
         if (maybeLocalIndex != null) {
-            this.addLine("iload " + (int)maybeLocalIndex);
+            addLine("iload " + (int)maybeLocalIndex);
         }
     }
 

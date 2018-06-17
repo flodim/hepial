@@ -14,7 +14,7 @@ FILE_OUTPUT_CLASS=HepialProgram
 
 TEST_CLASS=test
 
-FILE=../hepial_files/hepial_logic
+FILE=../hepial_files/hepial4_corrected
 
 run: $(FILE_OUTPUT_CLASS).class
 	$(JAVA) $(FILE_OUTPUT_CLASS)

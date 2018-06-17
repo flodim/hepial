@@ -29,6 +29,10 @@ public class ForLoop extends Instruction {
         return instructions;
     }
 
+    public Idf getVar() {
+        return var;
+    }
+
     @Override
     public Object accept(Visitor visitor) {
         return visitor.visit(this);
