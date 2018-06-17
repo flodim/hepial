@@ -1,10 +1,22 @@
 programme logic
 debutprg
 
-    si 1 == 1 et 1==42 alors
+    si 1 == 23 ou 1==1 alors
 	    ecrire "true";
 	sinon
 	    ecrire "false";
 	finsi
+
+	si 4 == 2+2 et 12 == 3*4 alors
+        ecrire "true";
+    sinon
+        ecrire "false";
+    finsi
+
+    si 2*2 == 4+4 ou 6*6 == 2 ou 6*7 <> 123 alors
+        ecrire "true";
+    sinon
+        ecrire "false";
+    finsi
 
 finprg

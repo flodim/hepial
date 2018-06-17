@@ -63,10 +63,11 @@ non terminal Type typebase,type;
 non terminal String array;
 non terminal HashMap<Entry,Symb> param;
 
+precedence left AND, OR;
+precedence left EQUALS, DIFF;
+precedence left INF, SUP, INFEQUAL, SUPEQUAL, DOUBLEPOINTS;
 precedence left PLUS, MINUS;
 precedence left TIMES, DIVIDE;
-precedence left EQUALS, DIFF;
-precedence left INF, SUP, INFEQUAL, SUPEQUAL, AND, OR, DOUBLEPOINTS;
 precedence right TILDA, NOT;
 
 //HEPIAL GRAMMAR RULES (ordered like the exemple in the pdf)
