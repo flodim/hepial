@@ -12,6 +12,6 @@ public class Or extends Binary {
 
     @Override
     public Object accept(Visitor visitor) {
-        return null;
+        return visitor.visit(this);
     }
 }
