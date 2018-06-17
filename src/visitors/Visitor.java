@@ -39,10 +39,6 @@ public abstract class Visitor {
 
     public Object visit(WhileLoop whileLoop) { return null; }
 
-    public Object visit(QualifiedCall qualifiedCall) {
-        return null;
-    }
-
     public Object visit(Tilda tilda) {
         return null;
     }
@@ -58,7 +54,6 @@ public abstract class Visitor {
     public Object visit(And and) {
         return null;
     }
-
 
     public Object visit(Idf idf) {
         return null;
