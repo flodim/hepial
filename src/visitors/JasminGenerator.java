@@ -124,6 +124,25 @@ public class JasminGenerator extends Visitor {
         return null;
     }
 
+    @Override
+    public Object visit(Tilda tilda){
+        loadIfLocalIndex(tilda.getExp().accept(this));
+        addLine("ineg");
+        addLine("ldc 1");
+        addLine("isub");
+
+        return null;
+    }
+
+    @Override
+    public Object visit(Not not){
+        loadIfLocalIndex(not.getExp().accept(this));
+        addLine("ldc 1");
+        addLine("ixor");
+
+        return null;
+    }
+
 
     @Override
     public Object visit(Division division) {
