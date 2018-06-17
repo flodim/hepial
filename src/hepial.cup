@@ -62,6 +62,7 @@ non terminal String head;
 non terminal Type typebase,type;
 non terminal String array;
 non terminal HashMap<Entry,Symb> param;
+
 precedence left PLUS, MINUS, TIMES, DIVIDE, EQUALS, DIFF;
 precedence left INF, SUP, INFEQUAL, SUPEQUAL, AND, OR, DOUBLEPOINTS;
 precedence right TILDA, NOT;
