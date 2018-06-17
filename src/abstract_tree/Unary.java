@@ -9,11 +9,6 @@ public abstract class Unary extends Expression{
         return exp;
     }
 
-    @Override
-    public Type getType() {
-        return exp.getType();
-    }
-
     public void setExp(Expression exp) {
         this.exp = exp;
     }

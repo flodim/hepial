@@ -101,9 +101,7 @@ public class JasminGenerator extends Visitor {
     public Object visit(Addition addition) {
         addition.getLeft().accept(this);
         addition.getRight().accept(this);
-
         this.addLine("iadd");
-
         return null;
     }
 
@@ -135,6 +133,19 @@ public class JasminGenerator extends Visitor {
 
         this.addLine("idiv");
 
+        return null;
+    }
+
+    @Override
+    public Object visit(Not not){
+        not.getExp().accept(this);
+        return null;
+
+    }
+
+    @Override
+    public Object visit(Tilda tilda) {
+        tilda.getExp().accept(this);
         return null;
     }
 

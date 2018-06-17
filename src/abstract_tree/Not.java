@@ -1,5 +1,7 @@
 package abstract_tree;
 
+import symbole_table.Type;
+import symbole_table.TypeBoolean;
 import visitors.Visitor;
 
 public class Not extends Unary {
@@ -13,4 +15,10 @@ public class Not extends Unary {
     public Object accept(Visitor visitor) {
         return visitor.visit(this);
     }
+    @Override
+
+    public Type getType() {
+        return TypeBoolean.getInstance();
+    }
+
 }
