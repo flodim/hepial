@@ -35,4 +35,5 @@ sym.java parser.java : $(FILE_CUP)
 	$(JAVAC) -classpath $(CLASSPATH) $<
 
 clean :
-	rm -rf *class *~ parser.java sym.java $(FILE_JAVA_NAME).java
+	find -type f -name '*.class' -delete
+	rm -rf *~ parser.java sym.java $(FILE_JAVA_NAME).java *.j

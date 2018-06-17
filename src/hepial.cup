@@ -63,7 +63,9 @@ non terminal Type typebase,type;
 non terminal String array;
 non terminal HashMap<Entry,Symb> param;
 
-precedence left PLUS, MINUS, TIMES, DIVIDE, EQUALS, DIFF;
+precedence left PLUS, MINUS;
+precedence left TIMES, DIVIDE;
+precedence left EQUALS, DIFF;
 precedence left INF, SUP, INFEQUAL, SUPEQUAL, AND, OR, DOUBLEPOINTS;
 precedence right TILDA, NOT;
 
@@ -78,7 +80,10 @@ entete::= PRG IDENT;
 
 decla_star::= decla decla_star |  ;
 
-decla::= declavar | declaconst | declafonct;
+decla::=
+  declavar
+| declaconst
+| declafonct;
 
 declavar::= type:t lident:id_list SEMICOLON
 
@@ -87,22 +92,18 @@ declavar::= type:t lident:id_list SEMICOLON
           addSymbol(new Entry(id_list.get(i)), new Symb(t,false));
      }
 
-:}
-;
+:};
 
 lident::=
-    IDENT:id {:
-    ArrayList<Idf>  id_list = new ArrayList<>();
+  IDENT:id {:
+      ArrayList<Idf>  id_list = new ArrayList<>();
+      id_list.add(new Idf(id));
+      RESULT= id_list;
+  :}
+| lident:id_list COMMA IDENT:id {:
     id_list.add(new Idf(id));
     RESULT= id_list;
-
-    :}
-    | lident:id_list COMMA IDENT:id {:
-
-    id_list.add(new Idf(id));
-    RESULT= id_list;
-
-    :};
+:};
 
 declaconst::= CONSTANT type:t IDENT:id EQUAL expr SEMICOLON
 {:
@@ -132,18 +133,18 @@ dim::=
     |dim COMMA expr DOUBLEPOINTS expr;
 
 param::=
-    type:t IDENT:id
-    {:
-        HashMap<Entry,Symb> list_param= new HashMap<>();
-        list_param.put(new Entry(new Idf(id)),new Symb(t,false));
-        RESULT=list_param;
+  type:t IDENT:id
+{:
+    HashMap<Entry,Symb> list_param= new HashMap<>();
+    list_param.put(new Entry(new Idf(id)),new Symb(t,false));
+    RESULT=list_param;
 
-    :}
-    |param:list_param COMMA type:t IDENT:id
-    {:
-        list_param.put(new Entry(new Idf(id)),new Symb(t,false));
-        RESULT= list_param;
-    :};
+:}
+| param:list_param COMMA type:t IDENT:id
+{:
+    list_param.put(new Entry(new Idf(id)),new Symb(t,false));
+    RESULT= list_param;
+:};
 
 
 body ::= instr body
@@ -157,7 +158,14 @@ body ::= instr body
 
 
 
-instr::= affect | write_instr | read_instr | cond  | return_instr | while_instr | for_instr;
+instr::=
+  affect
+| write_instr
+| read_instr
+| cond
+| return_instr
+| while_instr
+| for_instr;
 
 read_instr::= READ IDENT:id SEMICOLON
 {:
@@ -165,11 +173,11 @@ read_instr::= READ IDENT:id SEMICOLON
 :};
 
 write_instr::=
-    WRITE expr SEMICOLON
-    {:
-        Expression e = (Expression) treeStack.pop();
-        treeStack.push(new WriteInstr(e));
-    :};
+  WRITE expr SEMICOLON
+  {:
+      Expression e = (Expression) treeStack.pop();
+      treeStack.push(new WriteInstr(e));
+  :};
 
 affect::= access EQUAL expr SEMICOLON
 {:
@@ -208,24 +216,24 @@ for_instr::= FORSYM IDENT:var FROM expr TO expr DOSYM {: enterBlock(); :} body {
 :};
 
 expr::=
-    expr opebin expr
+    opebin
     {:
-        Expression right =(Expression)treeStack.pop();
         Binary oper = (Binary) treeStack.pop();
+        Expression right =(Expression)treeStack.pop();
         Expression left = (Expression)treeStack.pop();
         oper.setLeft(left);
         oper.setRight(right);
         treeStack.push(oper);
     :}
-    |opeun expr
+    |opeun
     {:
-        Expression exp= (Expression)treeStack.pop();
         Unary oper = (Unary)treeStack.pop();
+        Expression exp= (Expression)treeStack.pop();
         oper.setExp(exp);
         treeStack.push(oper);
     :}
     |OPENPARENT expr CLOSEPARENT
-    |operand ;
+    |operand;
 
 access::= IDENT:name {:
     treeStack.push(new Idf(name));
@@ -233,35 +241,38 @@ access::= IDENT:name {:
 
 index::= OPENBRACK expr CLOSEBRACK;
 
-operand::= access | funccall
+operand::=
+  access
+| funccall
 | INTEGERCONST:i {: treeStack.push(new IntNumber(i)); :}
 | TRUESYM {: treeStack.push(new BooleanValue(true));:}
 | FALSESYM {: treeStack.push(new BooleanValue(false)); :}
 | STRINGCONST:s {: treeStack.push(new StringValue(s)); :};
 
-opebin::= PLUS{: treeStack.push(new Addition()); :}
-|MINUS {: treeStack.push(new Substraction()); :}
-|TIMES {: treeStack.push(new Multiplication()); :}
-|DIVIDE{: treeStack.push(new Division()); :}
-|EQUALS {: treeStack.push(new Equal()); :}
-|DIFF {: treeStack.push(new NotEqual()); :}
-|INF {: treeStack.push(new Inferior()); :}
-|SUP {: treeStack.push(new Superior()); :}
-|INFEQUAL {: treeStack.push(new InfEqual()); :}
-|SUPEQUAL {: treeStack.push(new SupEqual()); :}
-|AND {: treeStack.push(new And()); :}
-|OR {: treeStack.push(new Or()); :};
+opebin::=
+  expr PLUS expr  {: treeStack.push(new Addition()); :}
+| expr MINUS expr {: treeStack.push(new Substraction()); :}
+| expr TIMES expr {: treeStack.push(new Multiplication()); :}
+| expr DIVIDE expr {: treeStack.push(new Division()); :}
+| expr EQUALS expr {: treeStack.push(new Equal()); :}
+| expr DIFF expr {: treeStack.push(new NotEqual()); :}
+| expr INF expr {: treeStack.push(new Inferior()); :}
+| expr SUP expr {: treeStack.push(new Superior()); :}
+| expr INFEQUAL expr {: treeStack.push(new InfEqual()); :}
+| expr SUPEQUAL expr {: treeStack.push(new SupEqual()); :}
+| expr AND expr {: treeStack.push(new And()); :}
+| expr OR expr {: treeStack.push(new Or()); :};
 
 opeun::=
-TILDA {: treeStack.push(new Tilda()); :}
-|NOT {: treeStack.push(new Not()); :};
+  TILDA expr {: treeStack.push(new Tilda()); :}
+| NOT expr {: treeStack.push(new Not()); :};
 
 funccall::=
-    IDENT:id OPENPARENT CLOSEPARENT
-    {:
-        treeStack.push(new Call(new Idf(id)));
-    :}
-    | IDENT:id OPENPARENT funcparams:nb_param CLOSEPARENT
+  IDENT:id OPENPARENT CLOSEPARENT
+  {:
+      treeStack.push(new Call(new Idf(id)));
+  :}
+| IDENT:id OPENPARENT funcparams:nb_param CLOSEPARENT
     {:
         ArrayList<Expression> params = new ArrayList<>();
         for(int i=0;i<nb_param;i++){
@@ -272,11 +283,12 @@ funccall::=
     :}
     ;
 
-funcparams::= expr
-{:
-    Integer cnt=1;
-    RESULT=cnt;
-:}
+funcparams::=
+  expr
+  {:
+      Integer cnt=1;
+      RESULT=cnt;
+  :}
 | funcparams:nb_param COMMA expr
     {:
         RESULT=nb_param++;
