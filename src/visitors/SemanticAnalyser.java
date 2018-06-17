@@ -81,6 +81,26 @@ public class SemanticAnalyser extends Visitor {
         return null;
     }
 
+    @Override
+    public Object visit(Not not) {
+        not.getExp().accept(this);
+        Type exp_type = not.getType();
+        if (!exp_type.isConform(TypeBoolean.getInstance())){
+            ErrorManager.getInstance().addError("Type error: expression type must be Boolean.");
+        }
+        return null;
+    }
+
+    @Override
+    public Object visit(Tilda tilda) {
+        tilda.getExp().accept(this);
+        Type exp_type = tilda.getType();
+        if (!exp_type.isConform(TypeInteger.getInstance())){
+            ErrorManager.getInstance().addError("Type error: expression type must be Integer.");
+        }
+        return null;
+    }
+
     private Object visit(Arithmetic arithmetic) {
         arithmetic.getLeft().accept(this);
         arithmetic.getRight().accept(this);

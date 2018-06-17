@@ -51,6 +51,15 @@ public abstract class Visitor {
         return null;
     }
 
+    public Object visit(Or or) {
+        return null;
+    }
+
+    public Object visit(And and) {
+        return null;
+    }
+
+
     public Object visit(Idf idf) {
         return null;
     }

@@ -1,0 +1,10 @@
+programme logic
+debutprg
+
+    si 1 == 1 et 1==42 alors
+	    ecrire "true";
+	sinon
+	    ecrire "false";
+	finsi
+
+finprg
