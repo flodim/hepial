@@ -136,6 +136,25 @@ public class JasminGenerator extends Visitor {
     }
 
     @Override
+    public Object visit(Or or){
+        loadIfLocalIndex(or.getLeft().accept(this));
+        loadIfLocalIndex(or.getRight().accept(this));
+        this.addLine("ior");
+
+        return null;
+    }
+
+    @Override
+    public Object visit(And and){
+        loadIfLocalIndex(and.getLeft().accept(this));
+        loadIfLocalIndex(and.getRight().accept(this));
+        this.addLine("iand");
+
+        return null;
+    }
+
+
+    @Override
     public Object visit(Condition condition) {
         loadIfLocalIndex(condition.getConditionExpression().accept(this));
 

@@ -14,7 +14,7 @@ FILE_OUTPUT_CLASS=HepialProgram
 
 TEST_CLASS=test
 
-FILE=../hepial_files/hepial_celsiusfarenheit
+FILE=../hepial_files/hepial_logic
 
 run: $(FILE_OUTPUT_CLASS).class
 	$(JAVA) $(FILE_OUTPUT_CLASS)
