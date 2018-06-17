@@ -192,7 +192,7 @@ return_instr::= RETURNSYM expr SEMICOLON
    treeStack.push(new ReturnInstr(expr));
  :};
 
-cond::= IFSYM expr  THEN {: enterBlock(); :} body {: exitBlock(); :} ELSESYM {: enterBlock(); :} body {: exitBlock(); :} ENDIF
+cond::= IFSYM expr THEN {: enterBlock(); :} body {: exitBlock(); :} ELSESYM {: enterBlock(); :} body {: exitBlock(); :} ENDIF
 {:
     Block elseBlock= (Block)treeStack.pop();
     Block thenBlock= (Block)treeStack.pop();

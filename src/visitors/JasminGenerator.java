@@ -1,7 +1,6 @@
 package visitors;
 
 import abstract_tree.*;
-import symbole_table.Type;
 import symbole_table.TypeBoolean;
 import symbole_table.TypeInteger;
 import symbole_table.TypeString;
@@ -149,6 +148,25 @@ public class JasminGenerator extends Visitor {
 
         this.addLine(elseLabel+":");
         condition.getElseInstructions().accept(this);
+
+        this.addLine(endLabel+":");
+
+        return null;
+    }
+
+    @Override
+    public Object visit(WhileLoop whileLoop) {
+        int ifNumber = this.nextIfNumber++;
+        String beginLabel = "while_"+ifNumber;
+        String endLabel = "endwhile_"+ifNumber;
+
+        this.addLine(beginLabel+":");
+        loadIfLocalIndex(whileLoop.getConditionExpression().accept(this));
+
+        this.addLine("ifeq "+endLabel);
+        whileLoop.getInstructions().accept(this);
+
+        this.addLine("goto "+beginLabel);
 
         this.addLine(endLabel+":");
 

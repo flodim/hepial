@@ -37,6 +37,8 @@ public abstract class Visitor {
         return null;
     }
 
+    public Object visit(WhileLoop whileLoop) { return null; }
+
     public Object visit(QualifiedCall qualifiedCall) {
         return null;
     }

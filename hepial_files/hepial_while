@@ -1,0 +1,12 @@
+programme hepialif
+
+entier i;
+
+debutprg
+    i = 0;
+    tantque i <> 42 faire
+        ecrire "Quel est la réponse à grande question sur la vie, l'univers et le reste?";
+        lire i;
+    fintantque
+    ecrire "C'est incontestablement la réponse exacte.";
+finprg

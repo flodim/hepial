@@ -4,16 +4,16 @@ import visitors.Visitor;
 
 public class WhileLoop extends Instruction {
 
-    private final Expression exp;
+    private final Expression conditionExpression;
     private final Block instructions;
 
     public WhileLoop(Expression exp, Block instructions){
-        this.exp=exp;
+        this.conditionExpression =exp;
         this.instructions=instructions;
     }
 
-    public Expression getExp() {
-        return exp;
+    public Expression getConditionExpression() {
+        return conditionExpression;
     }
 
     public Block getInstructions() {
@@ -22,6 +22,6 @@ public class WhileLoop extends Instruction {
 
     @Override
     public Object accept(Visitor visitor) {
-        return null;
+        return visitor.visit(this);
     }
 }
