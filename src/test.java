@@ -18,6 +18,7 @@ public class test {
             myFile = new FileReader(arg[0]);
         } catch (FileNotFoundException e) {
             System.out.println("File not found: "+arg[0]);
+            return;
         }
         Hepial myLex = new Hepial(myFile);
         parser myP = new parser(myLex);
@@ -26,7 +27,7 @@ public class test {
             myP.parse();
         }
         catch (Exception e) {
-            System.out.println("Jasmin generation error:\n" + e.toString() + " : " + e.getMessage());
+            System.out.println("Parse error:\n" + e.toString() + " : " + e.getMessage());
             for (StackTraceElement stackTraceElement : e.getStackTrace()) {
                 System.out.println(stackTraceElement);
             }
@@ -34,13 +35,14 @@ public class test {
         }
 
         Stack<AbstractTree> treeStack = myP.getTreeStack();
-        SemanticAnalyser semanticAnalyser = new SemanticAnalyser();
 
         System.out.println("Tree stack: "+treeStack);
 
         Block mainBlock = (Block)treeStack.pop();
 
         System.out.println("Parsing: done. Starting semantic analysis...");
+
+        SemanticAnalyser semanticAnalyser = new SemanticAnalyser();
         try {
             semanticAnalyser.visit(mainBlock);
         }
