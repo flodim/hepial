@@ -85,22 +85,17 @@ public class JasminGenerator extends Visitor {
     @Override
     public Object visit(Affectation affectation) {
         int destinationLocalIndex = (Integer) affectation.getDestination().accept(this);
-        Integer sourceLocalIndex = (Integer)affectation.getSource().accept(this);
+        loadIfLocalIndex(affectation.getSource().accept(this));
 
-        if (sourceLocalIndex != null) {
-            // the source is an IDF
-            addLine("iload " + sourceLocalIndex);
-        }
-
-        addLine("istore " + destinationLocalIndex);
+         addLine("istore " + destinationLocalIndex);
 
         return null;
     }
 
     @Override
     public Object visit(Addition addition) {
-        addition.getLeft().accept(this);
-        addition.getRight().accept(this);
+        loadIfLocalIndex(addition.getLeft().accept(this));
+        loadIfLocalIndex(addition.getRight().accept(this));
 
         this.addLine("iadd");
 
@@ -109,8 +104,8 @@ public class JasminGenerator extends Visitor {
 
     @Override
     public Object visit(Substraction substraction) {
-        substraction.getLeft().accept(this);
-        substraction.getRight().accept(this);
+        loadIfLocalIndex(substraction.getLeft().accept(this));
+        loadIfLocalIndex(substraction.getRight().accept(this));
 
         this.addLine("isub");
 
@@ -119,8 +114,8 @@ public class JasminGenerator extends Visitor {
 
     @Override
     public Object visit(Multiplication multiplication) {
-        multiplication.getLeft().accept(this);
-        multiplication.getRight().accept(this);
+        loadIfLocalIndex(multiplication.getLeft().accept(this));
+        loadIfLocalIndex(multiplication.getRight().accept(this));
 
         this.addLine("imul");
 
@@ -130,8 +125,8 @@ public class JasminGenerator extends Visitor {
 
     @Override
     public Object visit(Division division) {
-        division.getLeft().accept(this);
-        division.getRight().accept(this);
+        loadIfLocalIndex(division.getLeft().accept(this));
+        loadIfLocalIndex(division.getRight().accept(this));
 
         this.addLine("idiv");
 
@@ -147,10 +142,7 @@ public class JasminGenerator extends Visitor {
     public Object visit(WriteInstr writeInstr) {
         addLine("getstatic java/lang/System/out Ljava/io/PrintStream;");
 
-        Integer exprLocalIndex = (Integer) writeInstr.getExpr().accept(this);
-        if (exprLocalIndex != null) {
-            this.addLine("iload " + exprLocalIndex);
-        }
+        loadIfLocalIndex(writeInstr.getExpr().accept(this));
 
         if (writeInstr.getExpr().getType().isConform(TypeInteger.getInstance()) ||
                 writeInstr.getExpr().getType().isConform(TypeBoolean.getInstance())) {
@@ -183,5 +175,11 @@ public class JasminGenerator extends Visitor {
     private void addLine(String line) {
         jasminStringBuilder.append(line);
         jasminStringBuilder.append('\n');
+    }
+
+    private void loadIfLocalIndex(Object maybeLocalIndex) {
+        if (maybeLocalIndex != null) {
+            this.addLine("iload " + (int)maybeLocalIndex);
+        }
     }
 }

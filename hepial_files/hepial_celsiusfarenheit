@@ -5,6 +5,8 @@ entier c;
 debutprg
     ecrire "Entrez une valeur en celcius:";
 	lire c;
+	ecrire "La valeur entrée est: ";
+	ecrire c;
 	ecrire "La valeur en farenheit est:";
-	ecrire  c * 9 / 5 + 32;
+	ecrire  (9*c)/5  + 32;
 finprg
