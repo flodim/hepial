@@ -8,5 +8,5 @@ debutprg
 	ecrire "La valeur entrée est: ";
 	ecrire c;
 	ecrire "La valeur en farenheit est:";
-	ecrire  ((c * 9) / 5)  + 32;
+	ecrire  c * 9 / 5  + 32;
 finprg

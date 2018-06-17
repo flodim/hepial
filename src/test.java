@@ -1,5 +1,3 @@
-/* classe 'principale' */
-
 import abstract_tree.AbstractTree;
 import abstract_tree.Block;
 import symbole_table.ErrorManager;

@@ -84,4 +84,30 @@ public abstract class Visitor {
     public Object visit(Division division) {
         return null;
     }
+
+    public Object visit(Inferior inferior) {
+        return null;
+    }
+
+    public Object visit(InfEqual infEqual) {
+        return null;
+    }
+
+    public Object visit(Superior superior) {
+        return null;
+    }
+
+    public Object visit(SupEqual supEqual) {
+        return null;
+    }
+
+    public Object visit(Equal equal) {
+        return null;
+    }
+
+    public Object visit(NotEqual notEqual) {
+        return null;
+    }
+
+
 }

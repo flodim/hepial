@@ -13,11 +13,13 @@ public class JasminGenerator extends Visitor {
     private StringBuilder jasminStringBuilder;
     private HashMap<String, Integer> localsIndices;
     private int nextLocalIndex;
+    private int nextIfNumber;
 
     public String generate(Block mainBlock) {
         this.jasminStringBuilder = new StringBuilder();
         this.localsIndices = new HashMap<>();
         this.nextLocalIndex = 0;
+        this.nextIfNumber = 0;
 
         addLine(".class public HepialProgram");
         addLine(".super java/lang/Object");
@@ -134,8 +136,59 @@ public class JasminGenerator extends Visitor {
     }
 
     @Override
-    public Object visit(Comparison comparison) {
-        return super.visit(comparison);
+    public Object visit(Condition condition) {
+        loadIfLocalIndex(condition.getConditionExpression().accept(this));
+
+        int ifNumber = this.nextIfNumber++;
+        String elseLabel = "else_"+ifNumber;
+        String endLabel = "endif_"+ifNumber;
+
+        this.addLine("ifeq "+elseLabel);
+        condition.getThenInstructions().accept(this);
+        this.addLine("goto "+endLabel);
+
+        this.addLine(elseLabel+":");
+        condition.getElseInstructions().accept(this);
+
+        this.addLine(endLabel+":");
+
+        return null;
+    }
+
+    @Override
+    public Object visit(Inferior inferior) {
+        loadComparisonResult(inferior, "if_icmplt");
+        return null;
+    }
+
+    @Override
+    public Object visit(InfEqual infEqual) {
+        loadComparisonResult(infEqual, "if_icmple");
+        return null;
+    }
+
+    @Override
+    public Object visit(Superior superior) {
+        loadComparisonResult(superior, "if_icmpgt");
+        return null;
+    }
+
+    @Override
+    public Object visit(SupEqual supEqual) {
+        loadComparisonResult(supEqual, "if_icmpge");
+        return null;
+    }
+
+    @Override
+    public Object visit(Equal equal) {
+        loadComparisonResult(equal, "if_icmpeq");
+        return null;
+    }
+
+    @Override
+    public Object visit(NotEqual notEqual) {
+        loadComparisonResult(notEqual, "if_icmpne");
+        return null;
     }
 
     @Override
@@ -181,5 +234,21 @@ public class JasminGenerator extends Visitor {
         if (maybeLocalIndex != null) {
             this.addLine("iload " + (int)maybeLocalIndex);
         }
+    }
+
+    private void loadComparisonResult(Comparison comparison, String ifInstruction) {
+        loadIfLocalIndex(comparison.getLeft().accept(this));
+        loadIfLocalIndex(comparison.getRight().accept(this));
+
+        int ifNumber = nextIfNumber++;
+        String thenLabel = "then_"+ifNumber;
+        String endifLabel = "endif_"+ifNumber;
+
+        addLine(ifInstruction+" "+thenLabel);
+        addLine("ldc 0");
+        addLine("goto "+endifLabel);
+        addLine(thenLabel+":");
+        addLine("ldc 1");
+        addLine(endifLabel+":");
     }
 }

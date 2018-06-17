@@ -14,7 +14,7 @@ FILE_OUTPUT_CLASS=HepialProgram
 
 TEST_CLASS=test
 
-FILE=../hepial_files/hepial_celsiusfarenheit
+FILE=../hepial_files/hepial_if
 
 run: $(FILE_OUTPUT_CLASS).class
 	$(JAVA) $(FILE_OUTPUT_CLASS)
@@ -35,4 +35,5 @@ sym.java parser.java : $(FILE_CUP)
 	$(JAVAC) -classpath $(CLASSPATH) $<
 
 clean :
-	rm -rf *class *~ parser.java sym.java $(FILE_JAVA_NAME).java
+	find -type f -name '*.class' -delete
+	rm -rf *~ parser.java sym.java $(FILE_JAVA_NAME).java *.j

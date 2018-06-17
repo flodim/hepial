@@ -1,0 +1,14 @@
+programme hepialif
+
+entier age;
+
+debutprg
+    ecrire "Quel est ton age?";
+	lire age;
+
+	si age >= 18 alors
+	    ecrire "Tu es majeur.";
+	sinon
+	    ecrire "Tu es mineur.";
+	finsi
+finprg
